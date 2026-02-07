@@ -75,7 +75,7 @@ export default function HomePage() {
                         <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6">
                             <span className="text-gray-800">Welcome to </span>
                             <span className="bg-gradient-to-r from-sky-500 via-blue-500 to-cyan-500 bg-clip-text text-transparent">
-                                Badmino
+                                Goodminton
                             </span>
                             <span className="text-gray-800">,</span>
                             <br />

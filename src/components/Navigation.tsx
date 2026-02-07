@@ -16,7 +16,9 @@ import {
     Search,
     Briefcase,
     UserPlus,
-    ChevronDown
+    ChevronDown,
+    Target,
+    FileText
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -49,6 +51,8 @@ const navItems: NavItem[] = [
         icon: <Users size={18} />,
         dropdownItems: [
             { label: 'Find Partners Nearby', href: '/partners', icon: <Search size={16} />, description: 'Connect with players in your area' },
+            { label: 'Swipe for Partners', href: '/partners/swipe', icon: <Users size={16} />, description: 'Tinder-style partner matching' },
+            { label: 'My Preferences', href: '/partners/preferences', icon: <Target size={16} />, description: 'Set your partner preferences' },
             { label: 'Chat & Reach Out', href: '/matches', icon: <MessageCircle size={16} />, description: 'Message your connections' },
             { label: 'Scheduling', href: '/partners/scheduling', icon: <Clock size={16} />, description: 'Plan games with your partners' },
             { label: 'Fare Splitting', href: '/partners/fare-splitting', icon: <DollarSign size={16} />, description: 'Split court costs fairly' },
@@ -81,7 +85,9 @@ const navItems: NavItem[] = [
         dropdownItems: [
             { label: 'Join a Tournament', href: '/tournaments/organise?action=join', icon: <UserPlus size={16} />, description: 'Register as a participant' },
             { label: 'Organise a Tournament', href: '/tournaments/organise?action=organize', icon: <Calendar size={16} />, description: 'Host your own event' },
+            { label: 'My Tournaments', href: '/tournaments/my-tournaments', icon: <Trophy size={16} />, description: 'Manage your organised events' },
             { label: 'Work at a Tournament', href: '/tournaments/organise?action=work', icon: <Briefcase size={16} />, description: 'Find tournament jobs' },
+            { label: 'My Applications', href: '/tournaments/work/my-applications', icon: <FileText size={16} />, description: 'Track your job applications' },
         ]
     },
 ];
@@ -96,9 +102,9 @@ export function TopNav() {
                 <div className="flex h-16 items-center justify-between">
                     {/* Logo */}
                     <Link href="/" className="flex items-center gap-3">
-                        <BadminoLogo />
+                        <GoodmintonLogo />
                         <span className="text-xl font-bold bg-gradient-to-r from-sky-500 to-blue-600 bg-clip-text text-transparent">
-                            Badmino
+                            Goodminton
                         </span>
                     </Link>
 
@@ -189,8 +195,8 @@ export function TopNav() {
     );
 }
 
-// Custom Badmino Logo
-export function BadminoLogo({ size = 40 }: { size?: number }) {
+// Custom Goodminton Logo
+export function GoodmintonLogo({ size = 40 }: { size?: number }) {
     return (
         <div 
             className="relative flex items-center justify-center"
@@ -320,5 +326,5 @@ export function Logo({ size = 'md' }: { size?: 'sm' | 'md' | 'lg' }) {
         lg: 56,
     };
 
-    return <BadminoLogo size={sizes[size]} />;
+    return <GoodmintonLogo size={sizes[size]} />;
 }

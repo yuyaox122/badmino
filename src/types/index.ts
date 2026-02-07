@@ -111,3 +111,135 @@ export interface MapMarker {
     lng: number;
     data: Player | Tournament | Club;
 }
+
+// Tournament Job Types
+export interface TournamentJob {
+    id: string;
+    tournamentId: string;
+    tournamentName: string;
+    role: string;
+    description: string;
+    wage: number;
+    slots: number;
+    filled: number;
+    requirements: string[];
+    dates: string[];
+    location: string;
+    applicationDeadline: string;
+}
+
+export interface WorkExperience {
+    id: string;
+    tournamentName: string;
+    role: string;
+    dateFrom: string;
+    dateTo: string;
+    description: string;
+    reference?: {
+        name: string;
+        contact: string;
+    };
+}
+
+export interface JobApplication {
+    id: string;
+    jobId: string;
+    tournamentId: string;
+    position: string;
+    wage: number;
+    
+    // Applicant Info
+    applicantId: string;
+    fullName: string;
+    email: string;
+    phone: string;
+    photoUrl?: string;
+    
+    // Experience & Documents
+    experiences: WorkExperience[];
+    cvUrl?: string;
+    coverLetter: string;
+    
+    // Availability
+    availability: string[];
+    
+    // Status
+    status: 'pending' | 'under_review' | 'accepted' | 'rejected';
+    appliedAt: string;
+    reviewedAt?: string;
+    notes?: string;
+}
+
+export interface AthleteRegistration {
+    id: string;
+    tournamentId: string;
+    playerId: string;
+    player?: Player;
+    discipline: string[];
+    category: string;
+    gender: string;
+    skillLevel: SkillLevel;
+    registeredAt: string;
+    status: 'registered' | 'confirmed' | 'withdrawn';
+}
+
+export interface OrganisedTournament {
+    id: string;
+    name: string;
+    description: string;
+    date: string;
+    endDate?: string;
+    location: {
+        venue: string;
+        address: string;
+    };
+    status: 'draft' | 'pending' | 'active' | 'completed' | 'cancelled';
+    scale: string;
+    format: TournamentFormat;
+    
+    // Athletes
+    maxAthletes: number;
+    athletesRegistered: number;
+    
+    // Staff
+    hiringPersonnel: boolean;
+    positions: {
+        role: string;
+        wage: number;
+        slots: number;
+        filled: number;
+    }[];
+    
+    // Counts
+    applicationsCount: number;
+    
+    createdAt: string;
+    organiserId: string;
+}
+
+export interface PartnerPreferences {
+    gender: string;
+    location: string;
+    skillLevel: string;
+    playStyle: string[];
+    availability: string[];
+    intention: string[];
+}
+
+export interface PartnerSwipe {
+    id: string;
+    swiperId: string;
+    swipedId: string;
+    direction: 'like' | 'pass';
+    createdAt: string;
+}
+
+export interface PartnerMatch {
+    id: string;
+    player1Id: string;
+    player2Id: string;
+    player1?: Player;
+    player2?: Player;
+    matchedAt: string;
+    compatibility: number;
+}

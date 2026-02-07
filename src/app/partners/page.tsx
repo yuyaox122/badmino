@@ -15,7 +15,7 @@ import {
     ArrowRight,
     Sparkles
 } from 'lucide-react';
-import { BadminoLogo } from '@/components/Navigation';
+import { GoodmintonLogo } from '@/components/Navigation';
 
 const featureCards = [
     {
@@ -101,13 +101,13 @@ export default function HomePage() {
                             className="inline-flex items-center gap-2 bg-sky-100 text-sky-700 px-4 py-2 rounded-full mb-6"
                         >
                             <Sparkles size={16} />
-                            <span className="text-sm font-medium">Welcome to Badmino</span>
+                            <span className="text-sm font-medium">Welcome to Goodminton</span>
                         </motion.div>
 
                         <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6">
                             <span className="text-gray-800">Welcome to </span>
                             <span className="bg-gradient-to-r from-sky-500 via-blue-500 to-indigo-500 bg-clip-text text-transparent">
-                                Badmino
+                                Goodminton
                             </span>
                             <span className="text-gray-800">, </span>
                             <br className="hidden md:block" />
@@ -242,8 +242,8 @@ export default function HomePage() {
             <footer className="bg-white border-t border-gray-100 py-8">
                 <div className="container mx-auto px-4 text-center">
                     <div className="flex items-center justify-center gap-2 mb-4">
-                        <BadminoLogo size={32} />
-                        <span className="text-lg font-bold text-gray-800">Badmino</span>
+                        <GoodmintonLogo size={32} />
+                        <span className="text-lg font-bold text-gray-800">Goodminton</span>
                     </div>
                     <p className="text-gray-500 text-sm">
                         Built with ❤️ at AstonHack11 • Theme: Community - Connect, Support, Empower

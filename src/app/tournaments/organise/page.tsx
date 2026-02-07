@@ -20,26 +20,10 @@ import {
 import { useUser } from '@/context/UserContext';
 import { Header } from '@/components/Navigation';
 import { useSearchParams, useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { mockTournamentJobs, mockOrganisedTournaments } from '@/lib/mock-data';
 
 type FlowType = 'join' | 'organize' | 'work' | null;
-
-interface TournamentJob {
-    id: string;
-    tournament: string;
-    location: string;
-    date: string;
-    role: string;
-    wage: number;
-    slots: number;
-    filled: number;
-}
-
-const mockJobs: TournamentJob[] = [
-    { id: '1', tournament: 'Birmingham Spring Open', location: 'Aston University', date: 'March 2026', role: 'Line Judge', wage: 12, slots: 8, filled: 3 },
-    { id: '2', tournament: 'Midlands Championship', location: 'NEC Birmingham', date: 'April 2026', role: 'Court Manager', wage: 15, slots: 4, filled: 1 },
-    { id: '3', tournament: 'City League Finals', location: 'Birmingham Sports Hub', date: 'May 2026', role: 'Scorer', wage: 10, slots: 6, filled: 4 },
-    { id: '4', tournament: 'Summer Smash Tournament', location: 'Edgbaston Priory', date: 'June 2026', role: 'Umpire', wage: 18, slots: 4, filled: 0 },
-];
 
 interface TournamentQuestion {
     id: string;
@@ -351,9 +335,15 @@ export default function TournamentOrganisePage() {
                         </h2>
 
                         <div className="space-y-4">
-                            {mockJobs
-                                .filter(job => !selectedMonth || job.date === selectedMonth)
-                                .map((job, index) => (
+                            {mockTournamentJobs
+                                .filter(job => {
+                                    if (!selectedMonth) return true;
+                                    const tournament = mockOrganisedTournaments.find(t => t.id === job.tournamentId);
+                                    return tournament?.date.includes(selectedMonth.split(' ')[0]);
+                                })
+                                .map((job, index) => {
+                                    const tournament = mockOrganisedTournaments.find(t => t.id === job.tournamentId);
+                                    return (
                                     <motion.div
                                         key={job.id}
                                         initial={{ opacity: 0, y: 20 }}
@@ -363,21 +353,23 @@ export default function TournamentOrganisePage() {
                                     >
                                         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                                             <div className="flex-1">
-                                                <h3 className="text-lg font-bold text-gray-800 mb-1">{job.tournament}</h3>
+                                                <h3 className="text-lg font-bold text-gray-800 mb-1">{job.role}</h3>
+                                                <p className="text-sky-600 font-medium mb-2">{tournament?.name || 'Tournament'}</p>
                                                 <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">
                                                     <span className="flex items-center gap-1">
                                                         <MapPin className="w-4 h-4" />
-                                                        {job.location}
+                                                        {tournament?.location.venue || 'TBD'}
                                                     </span>
                                                     <span className="flex items-center gap-1">
                                                         <Calendar className="w-4 h-4" />
-                                                        {job.date}
+                                                        {tournament?.date || 'TBD'}
                                                     </span>
                                                     <span className="flex items-center gap-1">
-                                                        <Star className="w-4 h-4" />
-                                                        {job.role}
+                                                        <Clock className="w-4 h-4" />
+                                                        {job.dates?.[0] || 'Full day'}
                                                     </span>
                                                 </div>
+                                                <p className="text-sm text-gray-600 mt-2">{job.description}</p>
                                             </div>
 
                                             <div className="flex items-center gap-4">
@@ -385,16 +377,20 @@ export default function TournamentOrganisePage() {
                                                     <p className="text-2xl font-bold text-green-600">£{job.wage}/hr</p>
                                                     <p className="text-sm text-gray-500">
                                                         <Users className="w-3 h-3 inline mr-1" />
-                                                        {job.filled}/{job.slots} filled
+                                                        {job.slots - job.filled} spots left
                                                     </p>
                                                 </div>
-                                                <button className="px-6 py-3 bg-gradient-to-r from-sky-500 to-blue-600 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-sky-200 transition-all">
+                                                <Link 
+                                                    href={`/tournaments/work/apply/${job.id}`}
+                                                    className="px-6 py-3 bg-gradient-to-r from-sky-500 to-blue-600 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-sky-200 transition-all"
+                                                >
                                                     Apply
-                                                </button>
+                                                </Link>
                                             </div>
                                         </div>
                                     </motion.div>
-                                ))}
+                                    );
+                                })}
                         </div>
                     </motion.div>
 

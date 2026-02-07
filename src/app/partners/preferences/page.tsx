@@ -142,9 +142,9 @@ export default function PartnerPreferencesPage() {
         if (currentStep < questions.length - 1) {
             setCurrentStep(prev => prev + 1);
         } else {
-            // Save preferences and navigate
+            // Save preferences and navigate to swipe page
             console.log('Preferences saved:', answers);
-            router.push('/partners');
+            router.push('/partners/swipe');
         }
     };
 

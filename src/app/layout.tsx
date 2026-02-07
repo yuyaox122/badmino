@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Badmino - Find Your Perfect Partner",
+  title: "Goodminton - Find Your Perfect Partner",
   description: "Connect with badminton players near you. Find partners, join tournaments, and become part of the community.",
   keywords: ["badminton", "sports", "community", "partner finder", "tournaments"],
   authors: [{ name: "AstonHack11 Team" }],
