@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
     Trophy, 
@@ -119,7 +119,7 @@ const organizeQuestions: TournamentQuestion[] = [
 // Work at Tournament - Month Selection
 const workMonths = ['February 2026', 'March 2026', 'April 2026', 'May 2026', 'June 2026', 'July 2026'];
 
-export default function TournamentOrganisePage() {
+function TournamentOrganiseContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const { user } = useUser();
@@ -528,5 +528,17 @@ export default function TournamentOrganisePage() {
                 </div>
             </div>
         </div>
+    );
+}
+
+export default function TournamentOrganisePage() {
+    return (
+        <Suspense fallback={
+            <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-blue-50 flex items-center justify-center">
+                <div className="animate-pulse text-sky-500">Loading...</div>
+            </div>
+        }>
+            <TournamentOrganiseContent />
+        </Suspense>
     );
 }

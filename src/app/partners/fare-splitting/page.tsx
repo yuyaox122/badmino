@@ -1,310 +1,471 @@
 'use client';
 
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
     DollarSign, 
     Users, 
-    Plus, 
-    Minus, 
     Calculator,
     Check,
-    Share2,
     MapPin,
-    Clock
+    Clock,
+    Calendar,
+    ChevronRight,
+    AlertTriangle,
+    RotateCcw,
+    UserX,
+    UserCheck
 } from 'lucide-react';
 import { Header } from '@/components/Navigation';
-import { useUser } from '@/context/UserContext';
-import { mockPlayers } from '@/lib/mock-data';
+import { useBooking, ScheduledSession } from '@/context/BookingContext';
 
-interface Participant {
-    id: string;
+interface PaymentAllocation {
+    participantId: string;
     name: string;
     avatarUrl: string;
-    share: number;
-    paid: boolean;
+    amount: number;
+    percentage: number;
+    isIncluded: boolean;
+    isPaid: boolean;
 }
 
 export default function FareSplittingPage() {
-    const { user } = useUser();
-    const [totalCost, setTotalCost] = useState<string>('');
-    const [venue, setVenue] = useState('');
-    const [duration, setDuration] = useState(1);
-    const [participants, setParticipants] = useState<Participant[]>([
-        { 
-            id: user?.id || 'current', 
-            name: user?.name || 'You', 
-            avatarUrl: user?.avatarUrl || '', 
-            share: 0, 
-            paid: true 
-        },
-    ]);
-    const [showAddPartner, setShowAddPartner] = useState(false);
+    const { getSessionsForFareSplitting, getSessionById, updatePaymentAllocations, markParticipantPaid } = useBooking();
+    
+    const [selectedSessionId, setSelectedSessionId] = useState<string | null>(null);
+    const [allocations, setAllocations] = useState<PaymentAllocation[]>([]);
+    const [showWarning, setShowWarning] = useState(false);
+    
+    const sessions = getSessionsForFareSplitting();
+    const selectedSession = selectedSessionId ? getSessionById(selectedSessionId) : null;
 
-    const availablePartners = mockPlayers.filter(
-        p => !participants.some(participant => participant.id === p.id)
-    );
+    // Initialize allocations when session is selected
+    useEffect(() => {
+        if (selectedSession) {
+            if (selectedSession.paymentAllocations) {
+                setAllocations(selectedSession.paymentAllocations);
+            } else {
+                const initialAllocations: PaymentAllocation[] = selectedSession.participants.map(p => ({
+                    participantId: p.id,
+                    name: p.name,
+                    avatarUrl: p.avatarUrl,
+                    amount: p.share,
+                    percentage: (p.share / selectedSession.totalCost) * 100,
+                    isIncluded: true,
+                    isPaid: p.paid,
+                }));
+                setAllocations(initialAllocations);
+            }
+        }
+    }, [selectedSession]);
 
-    const costPerPerson = participants.length > 0 && totalCost
-        ? (parseFloat(totalCost) / participants.length).toFixed(2)
-        : '0.00';
+    // Calculate totals
+    const totalAllocated = allocations
+        .filter(a => a.isIncluded)
+        .reduce((sum, a) => sum + a.amount, 0);
+    
+    const difference = selectedSession ? selectedSession.totalCost - totalAllocated : 0;
+    const isBalanced = Math.abs(difference) < 0.01;
+    const includedCount = allocations.filter(a => a.isIncluded).length;
 
-    const addParticipant = (player: typeof mockPlayers[0]) => {
-        setParticipants(prev => [
-            ...prev,
-            {
-                id: player.id,
-                name: player.name,
-                avatarUrl: player.avatarUrl,
-                share: 0,
-                paid: false,
-            },
-        ]);
-        setShowAddPartner(false);
+    // Update a participant's payment amount via slider
+    const handleSliderChange = (participantId: string, newAmount: number) => {
+        setAllocations(prev => prev.map(a => {
+            if (a.participantId === participantId) {
+                return {
+                    ...a,
+                    amount: newAmount,
+                    percentage: selectedSession ? (newAmount / selectedSession.totalCost) * 100 : 0,
+                };
+            }
+            return a;
+        }));
     };
 
-    const removeParticipant = (id: string) => {
-        if (id === user?.id || id === 'current') return;
-        setParticipants(prev => prev.filter(p => p.id !== id));
+    // Toggle include/exclude participant
+    const toggleIncluded = (participantId: string) => {
+        setAllocations(prev => {
+            const updated = prev.map(a => {
+                if (a.participantId === participantId) {
+                    return { ...a, isIncluded: !a.isIncluded, amount: a.isIncluded ? 0 : a.amount };
+                }
+                return a;
+            });
+            
+            // Redistribute among included participants
+            const includedParticipants = updated.filter(a => a.isIncluded);
+            if (includedParticipants.length > 0 && selectedSession) {
+                const equalShare = selectedSession.totalCost / includedParticipants.length;
+                return updated.map(a => ({
+                    ...a,
+                    amount: a.isIncluded ? equalShare : 0,
+                    percentage: a.isIncluded ? (equalShare / selectedSession.totalCost) * 100 : 0,
+                }));
+            }
+            return updated;
+        });
     };
 
-    const togglePaid = (id: string) => {
-        setParticipants(prev => 
-            prev.map(p => p.id === id ? { ...p, paid: !p.paid } : p)
-        );
+    // Reset to equal split
+    const resetToEqual = () => {
+        if (!selectedSession) return;
+        const includedParticipants = allocations.filter(a => a.isIncluded);
+        if (includedParticipants.length === 0) return;
+        
+        const equalShare = selectedSession.totalCost / includedParticipants.length;
+        setAllocations(prev => prev.map(a => ({
+            ...a,
+            amount: a.isIncluded ? equalShare : 0,
+            percentage: a.isIncluded ? (equalShare / selectedSession.totalCost) * 100 : 0,
+        })));
     };
+
+    // Toggle paid status
+    const togglePaid = (participantId: string) => {
+        setAllocations(prev => prev.map(a => 
+            a.participantId === participantId ? { ...a, isPaid: !a.isPaid } : a
+        ));
+    };
+
+    // Save allocations
+    const handleSave = () => {
+        if (!isBalanced) {
+            setShowWarning(true);
+            return;
+        }
+        if (selectedSessionId) {
+            updatePaymentAllocations(selectedSessionId, allocations);
+        }
+    };
+
+    // Format currency
+    const formatCurrency = (amount: number) => `£${amount.toFixed(2)}`;
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-blue-50">
             <Header 
                 title="Fare Splitting" 
-                subtitle="Split court costs with your partners"
+                subtitle="Split court costs from scheduled sessions"
             />
 
             <div className="container mx-auto px-4 py-6 max-w-2xl">
-                {/* Cost Input Section */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="bg-white rounded-3xl shadow-lg p-6 mb-6 border border-sky-100"
-                >
-                    <h2 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-                        <Calculator className="w-6 h-6 text-sky-500" />
-                        Session Details
-                    </h2>
-
-                    {/* Venue */}
-                    <div className="mb-4">
-                        <label className="block text-sm font-medium text-gray-600 mb-2">
-                            <MapPin className="w-4 h-4 inline mr-1" />
-                            Venue / Court
-                        </label>
-                        <input
-                            type="text"
-                            placeholder="e.g., Aston University Sports Centre"
-                            value={venue}
-                            onChange={(e) => setVenue(e.target.value)}
-                            className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-sky-400 focus:ring-4 focus:ring-sky-100 outline-none transition-all"
-                        />
-                    </div>
-
-                    {/* Duration */}
-                    <div className="mb-4">
-                        <label className="block text-sm font-medium text-gray-600 mb-2">
-                            <Clock className="w-4 h-4 inline mr-1" />
-                            Duration (hours)
-                        </label>
-                        <div className="flex items-center gap-4">
-                            <button
-                                onClick={() => setDuration(Math.max(0.5, duration - 0.5))}
-                                className="p-3 rounded-xl bg-sky-100 text-sky-600 hover:bg-sky-200 transition-colors"
-                            >
-                                <Minus className="w-5 h-5" />
-                            </button>
-                            <span className="text-2xl font-bold text-gray-800 w-16 text-center">
-                                {duration}
-                            </span>
-                            <button
-                                onClick={() => setDuration(duration + 0.5)}
-                                className="p-3 rounded-xl bg-sky-100 text-sky-600 hover:bg-sky-200 transition-colors"
-                            >
-                                <Plus className="w-5 h-5" />
-                            </button>
-                        </div>
-                    </div>
-
-                    {/* Total Cost */}
-                    <div className="mb-4">
-                        <label className="block text-sm font-medium text-gray-600 mb-2">
-                            <DollarSign className="w-4 h-4 inline mr-1" />
-                            Total Cost (£)
-                        </label>
-                        <div className="relative">
-                            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-2xl text-gray-400">£</span>
-                            <input
-                                type="number"
-                                placeholder="0.00"
-                                value={totalCost}
-                                onChange={(e) => setTotalCost(e.target.value)}
-                                className="w-full pl-10 pr-4 py-4 text-3xl font-bold rounded-xl border-2 border-gray-200 focus:border-sky-400 focus:ring-4 focus:ring-sky-100 outline-none transition-all"
-                            />
-                        </div>
-                    </div>
-                </motion.div>
-
-                {/* Participants Section */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.1 }}
-                    className="bg-white rounded-3xl shadow-lg p-6 mb-6 border border-sky-100"
-                >
-                    <div className="flex items-center justify-between mb-6">
-                        <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
-                            <Users className="w-6 h-6 text-sky-500" />
-                            Participants ({participants.length})
+                {/* Session Selector */}
+                {!selectedSessionId ? (
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="space-y-4"
+                    >
+                        <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                            <Calendar className="w-6 h-6 text-sky-500" />
+                            Select a Scheduled Session
                         </h2>
-                        <button
-                            onClick={() => setShowAddPartner(true)}
-                            className="flex items-center gap-2 px-4 py-2 bg-sky-100 text-sky-600 rounded-xl font-medium hover:bg-sky-200 transition-colors"
-                        >
-                            <Plus className="w-4 h-4" />
-                            Add Partner
-                        </button>
-                    </div>
 
-                    <div className="space-y-3">
-                        {participants.map((participant, index) => (
-                            <motion.div
-                                key={participant.id}
-                                initial={{ opacity: 0, x: -20 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ delay: index * 0.05 }}
-                                className="flex items-center justify-between p-4 rounded-2xl bg-gray-50 border border-gray-100"
-                            >
-                                <div className="flex items-center gap-3">
-                                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-sky-400 to-blue-500 flex items-center justify-center text-white font-bold overflow-hidden">
-                                        {participant.avatarUrl ? (
-                                            <img src={participant.avatarUrl} alt={participant.name} className="w-full h-full object-cover" />
-                                        ) : (
-                                            participant.name.charAt(0)
+                        {sessions.length === 0 ? (
+                            <div className="bg-white rounded-3xl shadow-lg p-8 text-center border border-sky-100">
+                                <Calendar className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                                <h3 className="text-lg font-semibold text-gray-600 mb-2">No Scheduled Sessions</h3>
+                                <p className="text-gray-500">Schedule a game first to split costs with your partners.</p>
+                            </div>
+                        ) : (
+                            sessions.map((session) => (
+                                <motion.button
+                                    key={session.id}
+                                    whileHover={{ scale: 1.02 }}
+                                    whileTap={{ scale: 0.98 }}
+                                    onClick={() => setSelectedSessionId(session.id)}
+                                    className="w-full bg-white rounded-2xl shadow-lg p-5 border border-sky-100 hover:border-sky-300 transition-all text-left"
+                                >
+                                    <div className="flex justify-between items-start">
+                                        <div className="flex-1">
+                                            <div className="flex items-center gap-2 mb-2">
+                                                <MapPin className="w-4 h-4 text-sky-500" />
+                                                <span className="font-semibold text-gray-800">{session.venue.name}</span>
+                                            </div>
+                                            <div className="flex items-center gap-4 text-sm text-gray-500">
+                                                <span className="flex items-center gap-1">
+                                                    <Calendar className="w-4 h-4" />
+                                                    {new Date(session.date).toLocaleDateString('en-GB', { 
+                                                        weekday: 'short', 
+                                                        day: 'numeric', 
+                                                        month: 'short' 
+                                                    })}
+                                                </span>
+                                                <span className="flex items-center gap-1">
+                                                    <Clock className="w-4 h-4" />
+                                                    {session.time}
+                                                </span>
+                                                <span className="flex items-center gap-1">
+                                                    <Users className="w-4 h-4" />
+                                                    {session.participants.length} players
+                                                </span>
+                                            </div>
+                                            <div className="mt-3 flex items-center gap-2">
+                                                <span className="text-2xl font-bold text-sky-600">
+                                                    {formatCurrency(session.totalCost)}
+                                                </span>
+                                                <span className="text-sm text-gray-500">total</span>
+                                            </div>
+                                        </div>
+                                        <ChevronRight className="w-6 h-6 text-gray-400" />
+                                    </div>
+                                    
+                                    {/* Participant avatars */}
+                                    <div className="flex -space-x-2 mt-4">
+                                        {session.participants.slice(0, 5).map((p, i) => (
+                                            <div
+                                                key={p.id}
+                                                className="w-8 h-8 rounded-full bg-gradient-to-br from-sky-400 to-blue-500 border-2 border-white flex items-center justify-center text-white text-xs font-bold"
+                                            >
+                                                {p.name.charAt(0)}
+                                            </div>
+                                        ))}
+                                        {session.participants.length > 5 && (
+                                            <div className="w-8 h-8 rounded-full bg-gray-200 border-2 border-white flex items-center justify-center text-gray-600 text-xs font-bold">
+                                                +{session.participants.length - 5}
+                                            </div>
                                         )}
                                     </div>
-                                    <div>
-                                        <p className="font-semibold text-gray-800">
-                                            {participant.name}
-                                            {(participant.id === user?.id || participant.id === 'current') && (
-                                                <span className="ml-2 text-xs bg-sky-100 text-sky-600 px-2 py-0.5 rounded-full">You</span>
-                                            )}
-                                        </p>
-                                        <p className="text-sm text-gray-500">
-                                            Owes: <span className="font-semibold text-sky-600">£{costPerPerson}</span>
-                                        </p>
-                                    </div>
-                                </div>
+                                </motion.button>
+                            ))
+                        )}
+                    </motion.div>
+                ) : selectedSession && (
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="space-y-4"
+                    >
+                        {/* Session Header */}
+                        <div className="bg-white rounded-3xl shadow-lg p-6 border border-sky-100">
+                            <button
+                                onClick={() => setSelectedSessionId(null)}
+                                className="text-sky-500 text-sm font-medium mb-4 hover:text-sky-600"
+                            >
+                                ← Back to sessions
+                            </button>
+                            
+                            <div className="flex items-center gap-2 mb-2">
+                                <MapPin className="w-5 h-5 text-sky-500" />
+                                <h2 className="text-xl font-bold text-gray-800">{selectedSession.venue.name}</h2>
+                            </div>
+                            
+                            <div className="flex items-center gap-4 text-sm text-gray-500 mb-4">
+                                <span className="flex items-center gap-1">
+                                    <Calendar className="w-4 h-4" />
+                                    {new Date(selectedSession.date).toLocaleDateString('en-GB', { 
+                                        weekday: 'long', 
+                                        day: 'numeric', 
+                                        month: 'long' 
+                                    })}
+                                </span>
+                                <span className="flex items-center gap-1">
+                                    <Clock className="w-4 h-4" />
+                                    {selectedSession.time} • {selectedSession.duration}hr
+                                </span>
+                            </div>
 
+                            <div className="flex items-center justify-between bg-sky-50 rounded-2xl p-4">
+                                <div>
+                                    <p className="text-sm text-gray-500">Total Cost</p>
+                                    <p className="text-3xl font-bold text-sky-600">{formatCurrency(selectedSession.totalCost)}</p>
+                                </div>
+                                <div className="text-right">
+                                    <p className="text-sm text-gray-500">Per Person (equal)</p>
+                                    <p className="text-xl font-semibold text-gray-700">
+                                        {formatCurrency(selectedSession.totalCost / includedCount || 0)}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Balance Indicator */}
+                        <div className={`rounded-2xl p-4 ${isBalanced ? 'bg-green-50 border border-green-200' : 'bg-amber-50 border border-amber-200'}`}>
+                            <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-2">
-                                    <button
-                                        onClick={() => togglePaid(participant.id)}
-                                        className={`flex items-center gap-2 px-4 py-2 rounded-xl font-medium transition-all ${
-                                            participant.paid
-                                                ? 'bg-green-100 text-green-700'
-                                                : 'bg-orange-100 text-orange-700'
+                                    {isBalanced ? (
+                                        <Check className="w-5 h-5 text-green-500" />
+                                    ) : (
+                                        <AlertTriangle className="w-5 h-5 text-amber-500" />
+                                    )}
+                                    <span className={`font-medium ${isBalanced ? 'text-green-700' : 'text-amber-700'}`}>
+                                        {isBalanced ? 'Balanced!' : `${difference > 0 ? 'Under' : 'Over'} by ${formatCurrency(Math.abs(difference))}`}
+                                    </span>
+                                </div>
+                                <button
+                                    onClick={resetToEqual}
+                                    className="flex items-center gap-1 text-sm text-sky-600 hover:text-sky-700 font-medium"
+                                >
+                                    <RotateCcw className="w-4 h-4" />
+                                    Reset Equal
+                                </button>
+                            </div>
+                            
+                            {/* Progress bar */}
+                            <div className="mt-3 h-3 bg-gray-200 rounded-full overflow-hidden">
+                                <motion.div
+                                    initial={{ width: 0 }}
+                                    animate={{ width: `${Math.min((totalAllocated / selectedSession.totalCost) * 100, 100)}%` }}
+                                    className={`h-full rounded-full ${
+                                        isBalanced ? 'bg-green-500' : 
+                                        totalAllocated > selectedSession.totalCost ? 'bg-red-500' : 'bg-amber-500'
+                                    }`}
+                                />
+                            </div>
+                            <p className="text-xs text-gray-500 mt-1 text-right">
+                                {formatCurrency(totalAllocated)} / {formatCurrency(selectedSession.totalCost)} allocated
+                            </p>
+                        </div>
+
+                        {/* Payment Allocations */}
+                        <div className="bg-white rounded-3xl shadow-lg p-6 border border-sky-100">
+                            <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                                <Calculator className="w-5 h-5 text-sky-500" />
+                                Payment Allocations
+                            </h3>
+
+                            <div className="space-y-6">
+                                {allocations.map((allocation) => (
+                                    <div 
+                                        key={allocation.participantId}
+                                        className={`p-4 rounded-2xl transition-all ${
+                                            allocation.isIncluded 
+                                                ? 'bg-white border-2 border-gray-100' 
+                                                : 'bg-gray-50 border-2 border-dashed border-gray-200 opacity-60'
                                         }`}
                                     >
-                                        {participant.paid ? (
+                                        <div className="flex items-center justify-between mb-3">
+                                            <div className="flex items-center gap-3">
+                                                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-sky-400 to-blue-500 flex items-center justify-center text-white font-bold">
+                                                    {allocation.name.charAt(0)}
+                                                </div>
+                                                <div>
+                                                    <p className="font-semibold text-gray-800">{allocation.name}</p>
+                                                    <p className="text-xs text-gray-500">
+                                                        {allocation.percentage.toFixed(1)}% of total
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            
+                                            <div className="flex items-center gap-2">
+                                                {/* Include/Exclude Toggle */}
+                                                <button
+                                                    onClick={() => toggleIncluded(allocation.participantId)}
+                                                    className={`p-2 rounded-xl transition-colors ${
+                                                        allocation.isIncluded 
+                                                            ? 'bg-sky-100 text-sky-600 hover:bg-sky-200'
+                                                            : 'bg-gray-200 text-gray-500 hover:bg-gray-300'
+                                                    }`}
+                                                    title={allocation.isIncluded ? 'Exclude from split' : 'Include in split'}
+                                                >
+                                                    {allocation.isIncluded ? <UserCheck className="w-4 h-4" /> : <UserX className="w-4 h-4" />}
+                                                </button>
+                                                
+                                                {/* Paid Toggle */}
+                                                <button
+                                                    onClick={() => togglePaid(allocation.participantId)}
+                                                    className={`p-2 rounded-xl transition-colors ${
+                                                        allocation.isPaid 
+                                                            ? 'bg-green-100 text-green-600'
+                                                            : 'bg-gray-100 text-gray-400 hover:bg-gray-200'
+                                                    }`}
+                                                    title={allocation.isPaid ? 'Mark as unpaid' : 'Mark as paid'}
+                                                >
+                                                    <Check className="w-4 h-4" />
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        {allocation.isIncluded && (
                                             <>
-                                                <Check className="w-4 h-4" />
-                                                Paid
+                                                {/* Amount Display */}
+                                                <div className="flex items-center justify-between mb-2">
+                                                    <span className="text-sm text-gray-500">Amount to pay:</span>
+                                                    <span className="text-xl font-bold text-sky-600">
+                                                        {formatCurrency(allocation.amount)}
+                                                    </span>
+                                                </div>
+
+                                                {/* Slider */}
+                                                <input
+                                                    type="range"
+                                                    min={0}
+                                                    max={selectedSession.totalCost}
+                                                    step={0.5}
+                                                    value={allocation.amount}
+                                                    onChange={(e) => handleSliderChange(allocation.participantId, parseFloat(e.target.value))}
+                                                    className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider-sky"
+                                                    style={{
+                                                        background: `linear-gradient(to right, hsl(199, 89%, 48%) 0%, hsl(199, 89%, 48%) ${(allocation.amount / selectedSession.totalCost) * 100}%, #e5e7eb ${(allocation.amount / selectedSession.totalCost) * 100}%, #e5e7eb 100%)`
+                                                    }}
+                                                />
+                                                <div className="flex justify-between text-xs text-gray-400 mt-1">
+                                                    <span>£0</span>
+                                                    <span>{formatCurrency(selectedSession.totalCost)}</span>
+                                                </div>
                                             </>
-                                        ) : (
-                                            'Pending'
                                         )}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Save Button */}
+                        <motion.button
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                            onClick={handleSave}
+                            disabled={!isBalanced}
+                            className={`w-full py-4 rounded-2xl font-bold text-lg transition-all ${
+                                isBalanced
+                                    ? 'bg-gradient-to-r from-sky-500 to-blue-500 text-white shadow-lg hover:shadow-xl'
+                                    : 'bg-gray-200 text-gray-500 cursor-not-allowed'
+                            }`}
+                        >
+                            {isBalanced ? 'Save Allocations' : 'Balance amounts to save'}
+                        </motion.button>
+                    </motion.div>
+                )}
+
+                {/* Warning Modal */}
+                <AnimatePresence>
+                    {showWarning && (
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50"
+                            onClick={() => setShowWarning(false)}
+                        >
+                            <motion.div
+                                initial={{ scale: 0.9, opacity: 0 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                                exit={{ scale: 0.9, opacity: 0 }}
+                                onClick={(e) => e.stopPropagation()}
+                                className="bg-white rounded-3xl p-6 max-w-sm w-full"
+                            >
+                                <div className="text-center">
+                                    <div className="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                        <AlertTriangle className="w-8 h-8 text-amber-500" />
+                                    </div>
+                                    <h3 className="text-xl font-bold text-gray-800 mb-2">Amounts Don't Match</h3>
+                                    <p className="text-gray-600 mb-4">
+                                        The total allocated ({formatCurrency(totalAllocated)}) doesn't match the session cost ({formatCurrency(selectedSession?.totalCost || 0)}).
+                                    </p>
+                                    <p className="text-sm text-gray-500 mb-6">
+                                        Adjust the sliders or click "Reset Equal" to balance.
+                                    </p>
+                                    <button
+                                        onClick={() => setShowWarning(false)}
+                                        className="w-full py-3 bg-sky-500 text-white rounded-xl font-semibold hover:bg-sky-600 transition-colors"
+                                    >
+                                        Got it
                                     </button>
-                                    {participant.id !== user?.id && participant.id !== 'current' && (
-                                        <button
-                                            onClick={() => removeParticipant(participant.id)}
-                                            className="p-2 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-colors"
-                                        >
-                                            <Minus className="w-5 h-5" />
-                                        </button>
-                                    )}
                                 </div>
                             </motion.div>
-                        ))}
-                    </div>
-                </motion.div>
-
-                {/* Summary */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.2 }}
-                    className="bg-gradient-to-br from-sky-500 to-blue-600 rounded-3xl shadow-lg p-6 text-white"
-                >
-                    <div className="text-center mb-4">
-                        <p className="text-sky-100 mb-1">Each person pays</p>
-                        <p className="text-5xl font-bold">£{costPerPerson}</p>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4 mb-6">
-                        <div className="bg-white/10 rounded-xl p-4 text-center">
-                            <p className="text-sky-100 text-sm">Total Cost</p>
-                            <p className="text-xl font-bold">£{totalCost || '0.00'}</p>
-                        </div>
-                        <div className="bg-white/10 rounded-xl p-4 text-center">
-                            <p className="text-sky-100 text-sm">Split Between</p>
-                            <p className="text-xl font-bold">{participants.length} people</p>
-                        </div>
-                    </div>
-
-                    <button className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-white text-sky-600 font-bold rounded-xl hover:bg-sky-50 transition-colors">
-                        <Share2 className="w-5 h-5" />
-                        Send Payment Requests
-                    </button>
-                </motion.div>
-
-                {/* Add Partner Modal */}
-                {showAddPartner && (
-                    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            className="bg-white rounded-3xl p-6 max-w-md w-full max-h-[70vh] overflow-y-auto"
-                        >
-                            <h3 className="text-xl font-bold text-gray-800 mb-4">Add Partner</h3>
-                            
-                            {availablePartners.length > 0 ? (
-                                <div className="space-y-2">
-                                    {availablePartners.map(partner => (
-                                        <button
-                                            key={partner.id}
-                                            onClick={() => addParticipant(partner)}
-                                            className="w-full flex items-center gap-3 p-4 rounded-xl hover:bg-sky-50 border border-gray-100 transition-colors"
-                                        >
-                                            <div className="w-10 h-10 rounded-full overflow-hidden">
-                                                <img src={partner.avatarUrl} alt={partner.name} className="w-full h-full object-cover" />
-                                            </div>
-                                            <div className="text-left">
-                                                <p className="font-medium text-gray-800">{partner.name}</p>
-                                                <p className="text-sm text-gray-500">Level {partner.skillLevel}</p>
-                                            </div>
-                                        </button>
-                                    ))}
-                                </div>
-                            ) : (
-                                <p className="text-gray-500 text-center py-4">All partners have been added</p>
-                            )}
-
-                            <button
-                                onClick={() => setShowAddPartner(false)}
-                                className="w-full mt-4 px-6 py-3 bg-gray-100 text-gray-700 font-medium rounded-xl hover:bg-gray-200 transition-colors"
-                            >
-                                Cancel
-                            </button>
                         </motion.div>
-                    </div>
-                )}
+                    )}
+                </AnimatePresence>
             </div>
         </div>
     );

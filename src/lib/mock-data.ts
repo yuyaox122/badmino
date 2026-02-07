@@ -898,7 +898,20 @@ export const mockTournamentJobs = [
 ];
 
 // Mock My Applications (for current user as worker)
-export const mockMyApplications = [
+type ApplicationStatus = 'pending' | 'under_review' | 'accepted' | 'rejected';
+
+export const mockMyApplications: Array<{
+    id: string;
+    jobId: string;
+    tournamentId: string;
+    tournamentName: string;
+    position: string;
+    wage: number;
+    location: string;
+    dates: string[];
+    status: ApplicationStatus;
+    appliedAt: string;
+}> = [
     {
         id: 'myapp1',
         jobId: 'job4',
@@ -954,4 +967,121 @@ export const mockPartnerMatches = [
         matchedAt: '2026-02-06T10:00:00Z',
         compatibility: 85,
     },
+];
+
+// Mock Booked Sessions (for scheduling & fare splitting)
+export const mockBookedSessions = [
+    {
+        id: 'session1',
+        date: '2026-02-10',
+        time: '18:00',
+        duration: 2,
+        venue: {
+            id: '1',
+            name: 'Aston University Sports Centre',
+            pricePerHour: 12,
+        },
+        participants: [
+            { id: 'current-user', name: 'You', avatarUrl: '', share: 8, paid: true },
+            { id: '1', name: 'Alex Chen', avatarUrl: 'https://i.pravatar.cc/150?img=11', share: 8, paid: true },
+            { id: '2', name: 'Sarah Williams', avatarUrl: 'https://i.pravatar.cc/150?img=5', share: 8, paid: false },
+        ],
+        totalCost: 24,
+        splitMode: 'equal' as const,
+        status: 'upcoming' as const,
+        createdAt: '2026-02-05T14:00:00Z',
+        createdBy: 'current-user',
+    },
+    {
+        id: 'session2',
+        date: '2026-02-08',
+        time: '10:00',
+        duration: 1.5,
+        venue: {
+            id: '3',
+            name: 'Nechells Community Centre',
+            pricePerHour: 8,
+        },
+        participants: [
+            { id: 'current-user', name: 'You', avatarUrl: '', share: 6, paid: true },
+            { id: '3', name: 'Mike Johnson', avatarUrl: 'https://i.pravatar.cc/150?img=12', share: 6, paid: true },
+        ],
+        totalCost: 12,
+        splitMode: 'equal' as const,
+        status: 'completed' as const,
+        createdAt: '2026-02-03T09:00:00Z',
+        createdBy: 'current-user',
+    },
+    {
+        id: 'session3',
+        date: '2026-02-15',
+        time: '14:00',
+        duration: 2,
+        venue: {
+            id: '2',
+            name: 'Birmingham Sports Hub',
+            pricePerHour: 15,
+        },
+        participants: [
+            { id: 'current-user', name: 'You', avatarUrl: '', share: 12, paid: true },
+            { id: '4', name: 'Emma Davis', avatarUrl: 'https://i.pravatar.cc/150?img=9', share: 10, paid: false },
+            { id: '5', name: 'James Wilson', avatarUrl: 'https://i.pravatar.cc/150?img=7', share: 8, paid: false },
+        ],
+        totalCost: 30,
+        splitMode: 'custom' as const,
+        status: 'pending' as const,
+        createdAt: '2026-02-07T11:00:00Z',
+        createdBy: 'current-user',
+    },
+    {
+        id: 'session4',
+        date: '2026-02-12',
+        time: '19:00',
+        duration: 1,
+        venue: {
+            id: '4',
+            name: 'Perry Barr Leisure Centre',
+            pricePerHour: 10,
+        },
+        participants: [
+            { id: 'current-user', name: 'You', avatarUrl: '', share: 5, paid: false },
+            { id: '6', name: 'Lisa Thompson', avatarUrl: 'https://i.pravatar.cc/150?img=23', share: 5, paid: false },
+        ],
+        totalCost: 10,
+        splitMode: 'equal' as const,
+        status: 'upcoming' as const,
+        createdAt: '2026-02-07T16:00:00Z',
+        createdBy: 'current-user',
+    },
+    {
+        id: 'session5',
+        date: '2026-02-20',
+        time: '16:00',
+        duration: 2.5,
+        venue: {
+            id: '2',
+            name: 'Birmingham Sports Hub',
+            pricePerHour: 15,
+        },
+        participants: [
+            { id: 'current-user', name: 'You', avatarUrl: '', share: 9.375, paid: false },
+            { id: '1', name: 'Alex Chen', avatarUrl: 'https://i.pravatar.cc/150?img=11', share: 9.375, paid: false },
+            { id: '3', name: 'Mike Johnson', avatarUrl: 'https://i.pravatar.cc/150?img=12', share: 9.375, paid: false },
+            { id: '7', name: 'Sophie Brown', avatarUrl: 'https://i.pravatar.cc/150?img=32', share: 9.375, paid: false },
+        ],
+        totalCost: 37.5,
+        splitMode: 'equal' as const,
+        status: 'pending' as const,
+        createdAt: '2026-02-07T18:00:00Z',
+        createdBy: 'current-user',
+    },
+];
+
+// Mock Venues (for scheduling)
+export const mockVenues = [
+    { id: '1', name: 'Aston University Sports Centre', pricePerHour: 12, address: 'Aston Triangle, Birmingham B4 7ET', courts: 4 },
+    { id: '2', name: 'Birmingham Sports Hub', pricePerHour: 15, address: 'Walsall Road, Birmingham B42 1TR', courts: 6 },
+    { id: '3', name: 'Nechells Community Centre', pricePerHour: 8, address: 'Nechells Park Road, Birmingham B7 5PR', courts: 2 },
+    { id: '4', name: 'Perry Barr Leisure Centre', pricePerHour: 10, address: 'Aldridge Road, Birmingham B42 2ET', courts: 3 },
+    { id: '5', name: 'Sparkhill Pool & Fitness', pricePerHour: 9, address: 'Stratford Road, Birmingham B11 4EA', courts: 2 },
 ];

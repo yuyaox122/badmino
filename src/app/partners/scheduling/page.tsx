@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useMemo } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
     Calendar, 
     Clock, 
@@ -10,10 +10,15 @@ import {
     Check,
     ChevronLeft,
     ChevronRight,
-    Plus
+    Plus,
+    Minus,
+    DollarSign,
+    ArrowRight
 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { Header } from '@/components/Navigation';
 import { useUser } from '@/context/UserContext';
+import { useBooking } from '@/context/BookingContext';
 import { mockPlayers } from '@/lib/mock-data';
 
 const timeSlots = [
@@ -23,21 +28,39 @@ const timeSlots = [
 ];
 
 const venues = [
-    { id: '1', name: 'Aston University Sports Centre', price: 12 },
-    { id: '2', name: 'Birmingham Sports Hub', price: 15 },
-    { id: '3', name: 'Nechells Community Centre', price: 8 },
-    { id: '4', name: 'Perry Barr Leisure Centre', price: 10 },
+    { id: '1', name: 'Aston University Sports Centre', pricePerHour: 12 },
+    { id: '2', name: 'Birmingham Sports Hub', pricePerHour: 15 },
+    { id: '3', name: 'Nechells Community Centre', pricePerHour: 8 },
+    { id: '4', name: 'Perry Barr Leisure Centre', pricePerHour: 10 },
 ];
 
 export default function SchedulingPage() {
+    const router = useRouter();
     const { user } = useUser();
+    const { createSessionFromSchedule } = useBooking();
+    
     const [selectedDate, setSelectedDate] = useState<Date>(new Date());
     const [selectedTime, setSelectedTime] = useState<string | null>(null);
-    const [selectedVenue, setSelectedVenue] = useState<string | null>(null);
+    const [selectedVenueId, setSelectedVenueId] = useState<string | null>(null);
     const [selectedPartners, setSelectedPartners] = useState<string[]>([]);
+    const [duration, setDuration] = useState<number>(1);
     const [currentMonth, setCurrentMonth] = useState(new Date());
+    const [isScheduling, setIsScheduling] = useState(false);
 
-    const connectedPartners = mockPlayers.slice(0, 5); // Mock connected partners
+    const connectedPartners = mockPlayers.slice(0, 5);
+    
+    const selectedVenue = useMemo(() => 
+        venues.find(v => v.id === selectedVenueId),
+        [selectedVenueId]
+    );
+
+    const totalCost = useMemo(() => 
+        selectedVenue ? selectedVenue.pricePerHour * duration : 0,
+        [selectedVenue, duration]
+    );
+
+    const totalParticipants = selectedPartners.length + 1;
+    const costPerPerson = totalCost / totalParticipants;
 
     const getDaysInMonth = (date: Date) => {
         const year = date.getFullYear();
@@ -46,13 +69,11 @@ export default function SchedulingPage() {
         const lastDay = new Date(year, month + 1, 0);
         const days: Date[] = [];
         
-        // Add padding for first week
         const startPadding = firstDay.getDay();
         for (let i = startPadding - 1; i >= 0; i--) {
             days.push(new Date(year, month, -i));
         }
         
-        // Add days of month
         for (let d = 1; d <= lastDay.getDate(); d++) {
             days.push(new Date(year, month, d));
         }
@@ -89,7 +110,38 @@ export default function SchedulingPage() {
         return date < today;
     };
 
-    const canSchedule = selectedDate && selectedTime && selectedVenue && selectedPartners.length > 0;
+    const canSchedule = selectedDate && selectedTime && selectedVenueId && selectedPartners.length > 0;
+
+    const handleCreateSchedule = () => {
+        if (!canSchedule || !selectedVenue) return;
+        
+        setIsScheduling(true);
+        
+        const participantDetails = selectedPartners.map(id => {
+            const player = connectedPartners.find(p => p.id === id);
+            return {
+                id,
+                name: player?.name || 'Unknown',
+                avatarUrl: player?.avatarUrl || '',
+            };
+        });
+
+        createSessionFromSchedule({
+            date: selectedDate,
+            time: selectedTime!,
+            duration,
+            venue: {
+                id: selectedVenue.id,
+                name: selectedVenue.name,
+                pricePerHour: selectedVenue.pricePerHour,
+            },
+            participantDetails,
+        });
+
+        setTimeout(() => {
+            router.push('/partners/fare-splitting');
+        }, 500);
+    };
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-blue-50">
@@ -129,7 +181,6 @@ export default function SchedulingPage() {
                         </div>
                     </div>
 
-                    {/* Day Headers */}
                     <div className="grid grid-cols-7 gap-1 mb-2">
                         {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(day => (
                             <div key={day} className="text-center text-sm font-medium text-gray-500 py-2">
@@ -138,7 +189,6 @@ export default function SchedulingPage() {
                         ))}
                     </div>
 
-                    {/* Calendar Grid */}
                     <div className="grid grid-cols-7 gap-1">
                         {getDaysInMonth(currentMonth).map((date, index) => {
                             const isCurrentMonth = date.getMonth() === currentMonth.getMonth();
@@ -199,6 +249,38 @@ export default function SchedulingPage() {
                     </div>
                 </motion.div>
 
+                {/* Duration Selection */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.15 }}
+                    className="bg-white rounded-3xl shadow-lg p-6 mb-6 border border-sky-100"
+                >
+                    <h2 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+                        <Clock className="w-6 h-6 text-sky-500" />
+                        Duration
+                    </h2>
+
+                    <div className="flex items-center justify-center gap-6">
+                        <button
+                            onClick={() => setDuration(Math.max(0.5, duration - 0.5))}
+                            className="p-4 rounded-2xl bg-sky-100 text-sky-600 hover:bg-sky-200 transition-colors"
+                        >
+                            <Minus className="w-6 h-6" />
+                        </button>
+                        <div className="text-center">
+                            <span className="text-4xl font-bold text-gray-800">{duration}</span>
+                            <span className="text-lg text-gray-500 ml-2">hour{duration !== 1 ? 's' : ''}</span>
+                        </div>
+                        <button
+                            onClick={() => setDuration(duration + 0.5)}
+                            className="p-4 rounded-2xl bg-sky-100 text-sky-600 hover:bg-sky-200 transition-colors"
+                        >
+                            <Plus className="w-6 h-6" />
+                        </button>
+                    </div>
+                </motion.div>
+
                 {/* Venue Selection */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -215,17 +297,17 @@ export default function SchedulingPage() {
                         {venues.map(venue => (
                             <button
                                 key={venue.id}
-                                onClick={() => setSelectedVenue(venue.id)}
+                                onClick={() => setSelectedVenueId(venue.id)}
                                 className={`flex items-center justify-between p-4 rounded-xl border-2 transition-all ${
-                                    selectedVenue === venue.id
+                                    selectedVenueId === venue.id
                                         ? 'border-sky-400 bg-sky-50'
                                         : 'border-gray-200 hover:border-sky-200 hover:bg-sky-50/50'
                                 }`}
                             >
-                                <span className={`font-medium ${selectedVenue === venue.id ? 'text-sky-700' : 'text-gray-700'}`}>
+                                <span className={`font-medium ${selectedVenueId === venue.id ? 'text-sky-700' : 'text-gray-700'}`}>
                                     {venue.name}
                                 </span>
-                                <span className="text-sm font-bold text-green-600">£{venue.price}/hr</span>
+                                <span className="text-sm font-bold text-green-600">£{venue.pricePerHour}/hr</span>
                             </button>
                         ))}
                     </div>
@@ -240,7 +322,7 @@ export default function SchedulingPage() {
                 >
                     <h2 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
                         <Users className="w-6 h-6 text-sky-500" />
-                        Invite Partners
+                        Invite Partners ({selectedPartners.length} selected)
                     </h2>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -275,21 +357,83 @@ export default function SchedulingPage() {
                     </div>
                 </motion.div>
 
+                {/* Cost Preview */}
+                <AnimatePresence>
+                    {selectedVenue && (
+                        <motion.div
+                            initial={{ opacity: 0, y: 20, height: 0 }}
+                            animate={{ opacity: 1, y: 0, height: 'auto' }}
+                            exit={{ opacity: 0, y: -20, height: 0 }}
+                            transition={{ delay: 0.35 }}
+                            className="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-3xl shadow-lg p-6 mb-6 text-white"
+                        >
+                            <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+                                <DollarSign className="w-6 h-6" />
+                                Cost Preview
+                            </h2>
+
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+                                <div className="bg-white/20 rounded-xl p-4 text-center">
+                                    <p className="text-emerald-100 text-sm">Venue Rate</p>
+                                    <p className="text-xl font-bold">£{selectedVenue.pricePerHour}/hr</p>
+                                </div>
+                                <div className="bg-white/20 rounded-xl p-4 text-center">
+                                    <p className="text-emerald-100 text-sm">Duration</p>
+                                    <p className="text-xl font-bold">{duration} hr{duration !== 1 ? 's' : ''}</p>
+                                </div>
+                                <div className="bg-white/20 rounded-xl p-4 text-center">
+                                    <p className="text-emerald-100 text-sm">Total Cost</p>
+                                    <p className="text-xl font-bold">£{totalCost.toFixed(2)}</p>
+                                </div>
+                                <div className="bg-white/20 rounded-xl p-4 text-center">
+                                    <p className="text-emerald-100 text-sm">Per Person</p>
+                                    <p className="text-xl font-bold">£{costPerPerson.toFixed(2)}</p>
+                                </div>
+                            </div>
+
+                            <p className="text-center text-emerald-100 text-sm">
+                                Split between {totalParticipants} {totalParticipants === 1 ? 'person' : 'people'} (You{selectedPartners.length > 0 ? ` + ${selectedPartners.length} partner${selectedPartners.length > 1 ? 's' : ''}` : ''})
+                            </p>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+
                 {/* Schedule Button */}
                 <motion.button
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4 }}
-                    disabled={!canSchedule}
+                    disabled={!canSchedule || isScheduling}
+                    onClick={handleCreateSchedule}
                     className={`w-full flex items-center justify-center gap-3 px-8 py-4 font-bold text-lg rounded-2xl transition-all ${
-                        canSchedule
-                            ? 'bg-gradient-to-r from-sky-500 to-blue-600 text-white shadow-lg shadow-sky-200 hover:shadow-xl'
+                        canSchedule && !isScheduling
+                            ? 'bg-gradient-to-r from-sky-500 to-blue-600 text-white shadow-lg shadow-sky-200 hover:shadow-xl hover:scale-[1.02]'
                             : 'bg-gray-200 text-gray-400 cursor-not-allowed'
                     }`}
                 >
-                    <Plus className="w-6 h-6" />
-                    Create Schedule
+                    {isScheduling ? (
+                        <>
+                            <motion.div
+                                animate={{ rotate: 360 }}
+                                transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                                className="w-6 h-6 border-2 border-white border-t-transparent rounded-full"
+                            />
+                            Creating...
+                        </>
+                    ) : (
+                        <>
+                            <Plus className="w-6 h-6" />
+                            Create Schedule & Split Fare
+                            <ArrowRight className="w-5 h-5" />
+                        </>
+                    )}
                 </motion.button>
+
+                {!canSchedule && (
+                    <p className="text-center text-gray-500 mt-4 text-sm">
+                        Select a date, time, venue, and at least one partner to continue
+                    </p>
+                )}
             </div>
         </div>
     );

@@ -243,3 +243,53 @@ export interface PartnerMatch {
     matchedAt: string;
     compatibility: number;
 }
+
+// Booking & Fare Splitting Types
+export interface BookingVenue {
+    id: string;
+    name: string;
+    pricePerHour: number;
+}
+
+export interface BookingParticipant {
+    id: string;
+    name: string;
+    avatarUrl: string;
+    share: number;
+    customShare?: number;
+    percentage?: number;
+    paid: boolean;
+}
+
+export type SplitMode = 'equal' | 'custom' | 'percentage';
+export type BookingStatus = 'pending' | 'confirmed' | 'completed' | 'cancelled';
+
+export interface BookedSession {
+    id: string;
+    date: string;
+    time: string;
+    duration: number;
+    venue: BookingVenue;
+    participants: BookingParticipant[];
+    totalCost: number;
+    splitMode: SplitMode;
+    status: BookingStatus;
+    createdAt: string;
+    createdBy: string;
+}
+
+// Payment Allocation for fare splitting
+export interface PaymentAllocation {
+    participantId: string;
+    name: string;
+    avatarUrl: string;
+    amount: number;
+    percentage: number;
+    isIncluded: boolean; // Can toggle off to exclude from paying
+    isPaid: boolean;
+}
+
+export interface ScheduledSession extends BookedSession {
+    paymentAllocations?: PaymentAllocation[];
+}
+

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, Suspense } from 'react';
 import { motion, AnimatePresence, PanInfo } from 'framer-motion';
 import { 
     Heart, 
@@ -149,7 +149,7 @@ function SwipeCard({ player, onSwipe, compatibility }: SwipeCardProps) {
     );
 }
 
-export default function PartnerSwipePage() {
+function PartnerSwipeContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const { user } = useUser();
@@ -393,5 +393,17 @@ export default function PartnerSwipePage() {
                 </div>
             </div>
         </div>
+    );
+}
+
+export default function PartnerSwipePage() {
+    return (
+        <Suspense fallback={
+            <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-blue-50 flex items-center justify-center">
+                <div className="animate-pulse text-sky-500">Loading...</div>
+            </div>
+        }>
+            <PartnerSwipeContent />
+        </Suspense>
     );
 }
