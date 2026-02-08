@@ -60,7 +60,7 @@ const navItems: NavItem[] = [
         dropdownItems: [
             { label: 'Browse Leagues', href: '/league', icon: <Search size={16} />, description: 'Find leagues near you' },
             { label: 'My Leagues', href: '/league?view=my-leagues', icon: <Users size={16} />, description: 'View your league memberships' },
-            { label: 'Leaderboards', href: '/league?view=leaderboard', icon: <Trophy size={16} />, description: 'Check rankings and standings' },
+            { label: 'Leaderboards', href: '/league/leaderboard', icon: <Trophy size={16} />, description: 'Check rankings and standings' },
         ]
     },
     {

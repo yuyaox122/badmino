@@ -3,10 +3,10 @@
 import React, { useRef } from 'react';
 import Link from 'next/link';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { 
-    Users, 
-    Calendar, 
-    MapPin, 
+import {
+    Users,
+    Calendar,
+    MapPin,
     DollarSign,
     ArrowRight,
     Zap,
@@ -49,7 +49,7 @@ const clubOptions = [
     { label: 'My Clubs', href: '/clubs?view=my-clubs', icon: Users, description: 'Manage your memberships' },
     { label: 'Create a Club', href: '/clubs/create', icon: UserPlus, description: 'Start your own community' },
     { label: 'Browse Leagues', href: '/league', icon: Trophy, description: 'Find leagues near you' },
-    { label: 'Leaderboards', href: '/league?view=leaderboard', icon: Star, description: 'Check rankings and standings' },
+    { label: 'Leaderboards', href: '/league/leaderboard', icon: Star, description: 'Check rankings and standings' },
 ];
 
 const courtOptions = [
@@ -77,21 +77,21 @@ interface OptionCardProps {
 
 function OptionCard({ label, href, icon: Icon, description, index }: OptionCardProps) {
     const isEven = index % 2 === 0;
-    
+
     return (
         <motion.div
             initial={{ opacity: 0, x: isEven ? -40 : 40 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: false, margin: "-30px" }}
-            transition={{ 
-                delay: index * 0.08, 
+            transition={{
+                delay: index * 0.08,
                 duration: 0.4,
                 type: "spring",
                 stiffness: 120
             }}
         >
             <Link href={href}>
-                <motion.div 
+                <motion.div
                     className="group flex items-center gap-4 p-4 bg-white/10 backdrop-blur-md rounded-xl border border-white/10 hover:bg-white/20 hover:border-white/20 transition-all duration-300 cursor-pointer"
                     whileHover={{ x: 6, scale: 1.01 }}
                     whileTap={{ scale: 0.98 }}
@@ -135,8 +135,8 @@ function FeatureSection({ title, subtitle, options, imageSrc, imageAlt, contentP
 
     // Content slide in from the side
     const contentX = useTransform(
-        scrollYProgress, 
-        [0, 0.2, 0.8, 1], 
+        scrollYProgress,
+        [0, 0.2, 0.8, 1],
         [contentPosition === 'left' ? -150 : 150, 0, 0, contentPosition === 'left' ? -150 : 150]
     );
     const contentOpacity = useTransform(scrollYProgress, [0, 0.15, 0.85, 1], [0, 1, 1, 0]);
@@ -145,30 +145,30 @@ function FeatureSection({ title, subtitle, options, imageSrc, imageAlt, contentP
         <section ref={sectionRef} className="relative min-h-[900px] md:min-h-[1000px] overflow-hidden">
             {/* Gradient fade at top */}
             <div className="absolute top-0 left-0 right-0 h-40 bg-gradient-to-b from-slate-900 to-transparent z-10 pointer-events-none" />
-            
+
             {/* Full-width background image with float effect */}
-            <motion.div 
+            <motion.div
                 className="absolute inset-0 z-0"
                 style={{ y: bgY, scale: bgScale, opacity: bgOpacity }}
             >
-                <img 
-                    src={imageSrc} 
-                    alt={imageAlt} 
+                <img
+                    src={imageSrc}
+                    alt={imageAlt}
                     className="w-full h-full object-cover"
                     style={{ objectPosition: imagePosition }}
                 />
             </motion.div>
-            
+
             {/* Persistent dark overlay */}
             <div className="absolute inset-0 bg-slate-900/50 z-[1]" />
-            
+
             {/* Gradient fade at bottom */}
             <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-slate-900 to-transparent z-10 pointer-events-none" />
 
             {/* Content container */}
             <div className="relative z-20 container mx-auto px-6 h-full min-h-[900px] md:min-h-[1000px] flex items-center py-20">
                 <div className={`w-full lg:w-1/2 ${contentPosition === 'right' ? 'lg:ml-auto' : ''}`}>
-                    <motion.div 
+                    <motion.div
                         className="relative"
                         style={{ x: contentX, opacity: contentOpacity }}
                     >
@@ -176,7 +176,7 @@ function FeatureSection({ title, subtitle, options, imageSrc, imageAlt, contentP
                         <div className="bg-slate-800/90 backdrop-blur-md rounded-2xl p-8 shadow-2xl border border-white/10">
                             {/* Section header */}
                             <div className="mb-6">
-                                <motion.div 
+                                <motion.div
                                     className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 text-white rounded-full text-sm font-semibold tracking-wide mb-4 border border-white/20"
                                     initial={{ opacity: 0, y: -10 }}
                                     whileInView={{ opacity: 1, y: 0 }}
@@ -185,7 +185,7 @@ function FeatureSection({ title, subtitle, options, imageSrc, imageAlt, contentP
                                 >
                                     {subtitle}
                                 </motion.div>
-                                
+
                                 <h2 className="text-3xl md:text-4xl font-bold text-white leading-tight">
                                     {title}
                                 </h2>
@@ -208,38 +208,38 @@ function FeatureSection({ title, subtitle, options, imageSrc, imageAlt, contentP
 export default function HomePage() {
     const { user, isLoading } = useUser();
     const userName = user?.name?.split(' ')[0] || 'Player';
-    
+
     const heroRef = useRef<HTMLElement>(null);
     const { scrollYProgress: heroScrollProgress } = useScroll({
         target: heroRef,
         offset: ["start start", "end start"]
     });
-    
+
     // Hero element animations - FAST split left and right on scroll
     const heroOpacity = useTransform(heroScrollProgress, [0, 0.25], [1, 0]);
-    
+
     // Title "Welcome to" goes LEFT - faster
     const welcomeX = useTransform(heroScrollProgress, [0, 0.2], [0, -400]);
     const welcomeRotate = useTransform(heroScrollProgress, [0, 0.2], [0, -20]);
-    
+
     // Title "Goodminton" goes RIGHT - faster
     const goodmintonX = useTransform(heroScrollProgress, [0, 0.2], [0, 400]);
     const goodmintonRotate = useTransform(heroScrollProgress, [0, 0.2], [0, 20]);
-    
+
     // Badge goes UP and fades - faster
     const badgeY = useTransform(heroScrollProgress, [0, 0.15], [0, -200]);
     const badgeScale = useTransform(heroScrollProgress, [0, 0.15], [1, 0.3]);
-    
+
     // User greeting goes DOWN - faster
     const greetingY = useTransform(heroScrollProgress, [0, 0.2], [0, 300]);
     const greetingScale = useTransform(heroScrollProgress, [0, 0.2], [1, 0.5]);
-    
+
     // Subtitle splits - faster
     const subtitleY = useTransform(heroScrollProgress, [0, 0.2], [0, 150]);
-    
+
     // Scroll indicator fades immediately
     const scrollIndicatorOpacity = useTransform(heroScrollProgress, [0, 0.08], [1, 0]);
-    
+
     // Background elements spread dramatically - faster
     const bgSpreadLeft = useTransform(heroScrollProgress, [0, 0.2], [0, -350]);
     const bgSpreadRight = useTransform(heroScrollProgress, [0, 0.2], [0, 350]);
@@ -253,77 +253,77 @@ export default function HomePage() {
                 {/* Animated background elements that spread dramatically on scroll */}
                 <div className="absolute inset-0 pointer-events-none overflow-hidden">
                     {/* Top-left bubble - goes further left and up */}
-                    <motion.div 
+                    <motion.div
                         className="absolute top-20 left-[10%] w-24 h-24 bg-slate-700/40 rounded-full blur-xl"
-                        style={{ 
+                        style={{
                             x: bgSpreadLeft,
                             y: bgSpreadUp,
-                            opacity: heroOpacity 
+                            opacity: heroOpacity
                         }}
                         animate={{ scale: [1, 1.2, 1] }}
                         transition={{ duration: 4, repeat: Infinity }}
                     />
                     {/* Top-right bubble - goes further right and up */}
-                    <motion.div 
+                    <motion.div
                         className="absolute top-32 right-[12%] w-36 h-36 bg-slate-600/30 rounded-full blur-2xl"
-                        style={{ 
+                        style={{
                             x: bgSpreadRight,
                             y: bgSpreadUp,
-                            opacity: heroOpacity 
+                            opacity: heroOpacity
                         }}
                         animate={{ scale: [1.1, 1, 1.1] }}
                         transition={{ duration: 5, repeat: Infinity }}
                     />
                     {/* Bottom-left bubble - goes left and down */}
-                    <motion.div 
+                    <motion.div
                         className="absolute bottom-32 left-[20%] w-28 h-28 bg-slate-700/30 rounded-full blur-xl"
-                        style={{ 
+                        style={{
                             x: bgSpreadLeft,
                             y: bgSpreadDown,
-                            opacity: heroOpacity 
+                            opacity: heroOpacity
                         }}
                         animate={{ scale: [1, 1.15, 1] }}
                         transition={{ duration: 6, repeat: Infinity }}
                     />
                     {/* Bottom-right bubble - goes right and down */}
-                    <motion.div 
+                    <motion.div
                         className="absolute bottom-24 right-[18%] w-32 h-32 bg-slate-600/40 rounded-full blur-xl"
-                        style={{ 
+                        style={{
                             x: bgSpreadRight,
                             y: bgSpreadDown,
-                            opacity: heroOpacity 
+                            opacity: heroOpacity
                         }}
                         animate={{ scale: [1.1, 1, 1.1] }}
                         transition={{ duration: 7, repeat: Infinity }}
                     />
                     {/* Center-left accent */}
-                    <motion.div 
+                    <motion.div
                         className="absolute top-1/2 left-[5%] w-20 h-20 bg-slate-700/40 rounded-full blur-lg"
-                        style={{ 
+                        style={{
                             x: useTransform(heroScrollProgress, [0, 0.5], [0, -350]),
-                            opacity: heroOpacity 
+                            opacity: heroOpacity
                         }}
                     />
                     {/* Center-right accent */}
-                    <motion.div 
+                    <motion.div
                         className="absolute top-1/2 right-[5%] w-20 h-20 bg-slate-700/40 rounded-full blur-lg"
-                        style={{ 
+                        style={{
                             x: useTransform(heroScrollProgress, [0, 0.5], [0, 350]),
-                            opacity: heroOpacity 
+                            opacity: heroOpacity
                         }}
                     />
                 </div>
 
                 {/* Hero Content - Each element splits differently */}
                 <div className="relative z-10 container mx-auto px-6 text-center">
-                    
+
                     {/* Floating badge - floats UP on scroll */}
-                    <motion.div 
+                    <motion.div
                         className="inline-flex items-center gap-2 px-5 py-2 bg-white/10 backdrop-blur-sm rounded-full shadow-lg mb-8 border border-white/20"
-                        style={{ 
+                        style={{
                             y: badgeY,
                             scale: badgeScale,
-                            opacity: heroOpacity 
+                            opacity: heroOpacity
                         }}
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -331,15 +331,15 @@ export default function HomePage() {
                     >
                         <span className="text-white text-sm font-medium tracking-wide">YOUR BADMINTON COMMUNITY</span>
                     </motion.div>
-                    
+
                     {/* Main Heading - "Welcome to" goes LEFT, "Goodminton" goes RIGHT */}
                     <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-8 tracking-tight">
-                        <motion.span 
+                        <motion.span
                             className="text-white/80 inline-block"
-                            style={{ 
+                            style={{
                                 x: welcomeX,
                                 rotate: welcomeRotate,
-                                opacity: heroOpacity 
+                                opacity: heroOpacity
                             }}
                             initial={{ opacity: 0, x: -50 }}
                             animate={{ opacity: 1, x: 0 }}
@@ -348,12 +348,12 @@ export default function HomePage() {
                             Welcome to
                         </motion.span>
                         <br />
-                        <motion.span 
+                        <motion.span
                             className="text-white inline-block"
-                            style={{ 
+                            style={{
                                 x: goodmintonX,
                                 rotate: goodmintonRotate,
-                                opacity: heroOpacity 
+                                opacity: heroOpacity
                             }}
                             initial={{ opacity: 0, x: 50 }}
                             animate={{ opacity: 1, x: 0 }}
@@ -362,13 +362,13 @@ export default function HomePage() {
                             Goodminton
                         </motion.span>
                     </h1>
-                    
+
                     {/* User Greeting - goes DOWN on scroll */}
                     <motion.div
-                        style={{ 
+                        style={{
                             y: greetingY,
                             scale: greetingScale,
-                            opacity: heroOpacity 
+                            opacity: heroOpacity
                         }}
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}
@@ -387,11 +387,11 @@ export default function HomePage() {
                     </motion.div>
 
                     {/* Subtitle - fades and moves down */}
-                    <motion.p 
+                    <motion.p
                         className="text-lg md:text-xl text-white/70 max-w-2xl mx-auto mb-12 leading-relaxed"
-                        style={{ 
+                        style={{
                             y: subtitleY,
-                            opacity: heroOpacity 
+                            opacity: heroOpacity
                         }}
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
@@ -409,7 +409,7 @@ export default function HomePage() {
                         transition={{ delay: 1, duration: 0.5 }}
                     >
                         {/* Vertical text */}
-                        <motion.div 
+                        <motion.div
                             className="writing-mode-vertical text-white font-bold text-lg tracking-widest"
                             style={{ writingMode: 'vertical-rl', textOrientation: 'mixed' }}
                             animate={{ opacity: [0.5, 1, 0.5] }}
@@ -417,16 +417,16 @@ export default function HomePage() {
                         >
                             SCROLL
                         </motion.div>
-                        
+
                         {/* Animated line with dot */}
                         <div className="relative h-32 w-[3px] bg-white/30 rounded-full overflow-hidden">
-                            <motion.div 
+                            <motion.div
                                 className="absolute top-0 left-0 w-full bg-white rounded-full"
                                 animate={{ height: ['0%', '100%', '0%'], top: ['0%', '0%', '100%'] }}
                                 transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
                             />
                         </div>
-                        
+
                         {/* Bouncing arrow */}
                         <motion.div
                             className="bg-white/20 rounded-full p-2 shadow-lg border border-white/30"
@@ -490,7 +490,7 @@ export default function HomePage() {
             {/* Stats Section */}
             <section className="py-24 relative overflow-hidden bg-slate-900">
                 <div className="container mx-auto px-6">
-                    <motion.div 
+                    <motion.div
                         className="relative"
                         initial={{ opacity: 0, y: 50 }}
                         whileInView={{ opacity: 1, y: 0 }}
@@ -500,7 +500,7 @@ export default function HomePage() {
                         <h2 className="text-center text-3xl md:text-4xl font-bold text-white mb-12">
                             Join the Community
                         </h2>
-                        
+
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 relative z-10">
                             {[
                                 { value: '2,500+', label: 'Active Players', Icon: Users },
@@ -545,7 +545,7 @@ export default function HomePage() {
                             Join thousands of passionate badminton players. Find partners, book courts, and elevate your game.
                         </p>
                         <Link href="/discover">
-                            <motion.div 
+                            <motion.div
                                 className="inline-flex items-center gap-3 px-10 py-4 bg-white text-slate-900 font-bold text-lg rounded-lg shadow-xl cursor-pointer"
                                 whileHover={{ scale: 1.05, y: -2 }}
                                 whileTap={{ scale: 0.98 }}
