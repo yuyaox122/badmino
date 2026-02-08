@@ -175,8 +175,4 @@ clubs (
 
 ## 👥 Team
 
-Built with ❤️ at AstonHack11
-
-## 📄 License
-
-MIT License - feel free to use this for your own hackathons!
+Built at AstonHack11 🟪 
