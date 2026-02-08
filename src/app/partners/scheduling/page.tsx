@@ -2,11 +2,11 @@
 
 import React, { useState, useMemo, useEffect, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-    Calendar, 
-    Clock, 
-    MapPin, 
-    Users, 
+import {
+    Calendar,
+    Clock,
+    MapPin,
+    Users,
     Check,
     ChevronLeft,
     ChevronRight,
@@ -21,7 +21,8 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { Header } from '@/components/Navigation';
 import { useUser } from '@/context/UserContext';
 import { useBooking } from '@/context/BookingContext';
-import { mockPlayers } from '@/lib/mock-data';
+import { matchesAPI } from '@/lib/api/client';
+import { Player, PartnerMatch } from '@/types';
 
 const timeSlots = [
     '06:00', '07:00', '08:00', '09:00', '10:00', '11:00',
@@ -65,7 +66,7 @@ function SchedulingPageContent() {
     const searchParams = useSearchParams();
     const { user } = useUser();
     const { createSessionFromSchedule } = useBooking();
-    
+
     const [selectedDate, setSelectedDate] = useState<Date>(new Date());
     const [selectedTime, setSelectedTime] = useState<string | null>(null);
     const [selectedVenueId, setSelectedVenueId] = useState<string | null>(null);
@@ -73,26 +74,43 @@ function SchedulingPageContent() {
     const [duration, setDuration] = useState<number>(1);
     const [currentMonth, setCurrentMonth] = useState(new Date());
     const [isScheduling, setIsScheduling] = useState(false);
-    
+    const [matchedPartners, setMatchedPartners] = useState<Player[]>([]);
+
     // Get partner info from URL params (from match modal or chat)
     const urlPartnerId = searchParams.get('partnerId');
     const urlPartnerName = searchParams.get('partnerName');
 
+    // Fetch matched partners from database
+    useEffect(() => {
+        matchesAPI.getAll()
+            .then((matches: PartnerMatch[]) => {
+                const partners: Player[] = [];
+                for (const match of matches) {
+                    const otherPlayer = user && match.player1Id === user.id
+                        ? match.player2
+                        : match.player1;
+                    if (otherPlayer) {
+                        partners.push(otherPlayer);
+                    }
+                }
+                setMatchedPartners(partners);
+            })
+            .catch(err => console.error('Failed to load matched partners:', err));
+    }, [user]);
+
     // Build connected partners list - ensure URL partner is always included
     const connectedPartners = useMemo(() => {
-        const baseConnections = mockPlayers.slice(0, 5);
-        
+        const baseConnections = [...matchedPartners];
+
         if (urlPartnerId) {
-            // First, try to find the player in mockPlayers by ID
-            let matchedPlayer = mockPlayers.find(p => p.id === urlPartnerId);
-            
-            // If not found by ID and we have a name, try to find by name
+            let matchedPlayer = baseConnections.find(p => p.id === urlPartnerId);
+
             if (!matchedPlayer && urlPartnerName) {
-                matchedPlayer = mockPlayers.find(p => 
+                matchedPlayer = baseConnections.find(p =>
                     p.name.toLowerCase() === decodeURIComponent(urlPartnerName).toLowerCase()
                 );
             }
-            
+
             // If still not found but we have the name, create a temporary player object
             if (!matchedPlayer && urlPartnerName) {
                 matchedPlayer = {
@@ -117,16 +135,15 @@ function SchedulingPageContent() {
                     updatedAt: new Date().toISOString(),
                 };
             }
-            
+
             if (matchedPlayer) {
-                // Remove from base if exists, then add at front
                 const filtered = baseConnections.filter(c => c.id !== matchedPlayer!.id);
                 return [matchedPlayer, ...filtered];
             }
         }
-        
+
         return baseConnections;
-    }, [urlPartnerId, urlPartnerName]);
+    }, [matchedPartners, urlPartnerId, urlPartnerName]);
 
     // Auto-select the URL partner when component mounts or URL changes
     useEffect(() => {
@@ -134,13 +151,13 @@ function SchedulingPageContent() {
             setSelectedPartners([urlPartnerId]);
         }
     }, [urlPartnerId]); // Only run when urlPartnerId changes
-    
-    const selectedVenue = useMemo(() => 
+
+    const selectedVenue = useMemo(() =>
         venues.find(v => v.id === selectedVenueId),
         [selectedVenueId]
     );
 
-    const totalCost = useMemo(() => 
+    const totalCost = useMemo(() =>
         selectedVenue ? selectedVenue.pricePerHour * duration : 0,
         [selectedVenue, duration]
     );
@@ -154,16 +171,16 @@ function SchedulingPageContent() {
         const firstDay = new Date(year, month, 1);
         const lastDay = new Date(year, month + 1, 0);
         const days: Date[] = [];
-        
+
         const startPadding = firstDay.getDay();
         for (let i = startPadding - 1; i >= 0; i--) {
             days.push(new Date(year, month, -i));
         }
-        
+
         for (let d = 1; d <= lastDay.getDate(); d++) {
             days.push(new Date(year, month, d));
         }
-        
+
         return days;
     };
 
@@ -174,10 +191,10 @@ function SchedulingPageContent() {
     };
 
     const formatDate = (date: Date) => {
-        return date.toLocaleDateString('en-GB', { 
-            weekday: 'long', 
-            day: 'numeric', 
-            month: 'long' 
+        return date.toLocaleDateString('en-GB', {
+            weekday: 'long',
+            day: 'numeric',
+            month: 'long'
         });
     };
 
@@ -200,9 +217,9 @@ function SchedulingPageContent() {
 
     const handleCreateSchedule = () => {
         if (!canSchedule || !selectedVenue) return;
-        
+
         setIsScheduling(true);
-        
+
         const participantDetails = selectedPartners.map(id => {
             const player = connectedPartners.find(p => p.id === id);
             return {
@@ -231,8 +248,8 @@ function SchedulingPageContent() {
 
     return (
         <div className="min-h-screen bg-slate-900">
-            <Header 
-                title="Schedule a Game" 
+            <Header
+                title="Schedule a Game"
                 subtitle="Plan your next badminton session"
             />
 
@@ -283,17 +300,16 @@ function SchedulingPageContent() {
                                     key={index}
                                     onClick={() => !isPast(date) && setSelectedDate(date)}
                                     disabled={isPast(date)}
-                                    className={`p-3 rounded-xl text-sm font-medium transition-all ${
-                                        !isCurrentMonth
+                                    className={`p-3 rounded-xl text-sm font-medium transition-all ${!isCurrentMonth
                                             ? 'text-slate-600'
                                             : isPast(date)
-                                            ? 'text-slate-600 cursor-not-allowed'
-                                            : isSelected(date)
-                                            ? 'bg-white text-slate-900 shadow-lg'
-                                            : isToday(date)
-                                            ? 'bg-white/10 text-white hover:bg-white/20'
-                                            : 'text-slate-200 hover:bg-white/10'
-                                    }`}
+                                                ? 'text-slate-600 cursor-not-allowed'
+                                                : isSelected(date)
+                                                    ? 'bg-white text-slate-900 shadow-lg'
+                                                    : isToday(date)
+                                                        ? 'bg-white/10 text-white hover:bg-white/20'
+                                                        : 'text-slate-200 hover:bg-white/10'
+                                        }`}
                                 >
                                     {date.getDate()}
                                 </button>
@@ -323,11 +339,10 @@ function SchedulingPageContent() {
                             <button
                                 key={time}
                                 onClick={() => setSelectedTime(time)}
-                                className={`p-3 rounded-xl text-sm font-medium transition-all ${
-                                    selectedTime === time
+                                className={`p-3 rounded-xl text-sm font-medium transition-all ${selectedTime === time
                                         ? 'bg-white text-slate-900 shadow-lg'
                                         : 'bg-white/5 text-slate-300 hover:bg-white/10'
-                                }`}
+                                    }`}
                             >
                                 {time}
                             </button>
@@ -384,11 +399,10 @@ function SchedulingPageContent() {
                             <button
                                 key={venue.id}
                                 onClick={() => setSelectedVenueId(venue.id)}
-                                className={`flex items-center justify-between p-4 rounded-xl border-2 transition-all ${
-                                    selectedVenueId === venue.id
+                                className={`flex items-center justify-between p-4 rounded-xl border-2 transition-all ${selectedVenueId === venue.id
                                         ? 'border-sky-400 bg-sky-500/20'
                                         : 'border-white/10 hover:border-white/20 hover:bg-white/5'
-                                }`}
+                                    }`}
                             >
                                 <span className={`font-medium ${selectedVenueId === venue.id ? 'text-white' : 'text-slate-200'}`}>
                                     {venue.name}
@@ -427,18 +441,17 @@ function SchedulingPageContent() {
                         {connectedPartners.map(partner => {
                             const isPreSelected = partner.id === urlPartnerId;
                             const isSelected = selectedPartners.includes(partner.id);
-                            
+
                             return (
                                 <button
                                     key={partner.id}
                                     onClick={() => togglePartner(partner.id)}
-                                    className={`flex items-center gap-4 p-4 rounded-xl border-2 transition-all relative ${
-                                        isSelected
-                                            ? isPreSelected 
-                                                ? 'border-green-400 bg-green-500/20' 
+                                    className={`flex items-center gap-4 p-4 rounded-xl border-2 transition-all relative ${isSelected
+                                            ? isPreSelected
+                                                ? 'border-green-400 bg-green-500/20'
                                                 : 'border-sky-400 bg-sky-500/20'
                                             : 'border-white/10 hover:border-white/20 hover:bg-white/5'
-                                    }`}
+                                        }`}
                                 >
                                     {isPreSelected && (
                                         <div className="absolute -top-2 -right-2 px-2 py-0.5 bg-green-500 text-white text-xs font-medium rounded-full">
@@ -515,11 +528,10 @@ function SchedulingPageContent() {
                     transition={{ delay: 0.4 }}
                     disabled={!canSchedule || isScheduling}
                     onClick={handleCreateSchedule}
-                    className={`w-full flex items-center justify-center gap-3 px-8 py-4 font-bold text-lg rounded-2xl transition-all ${
-                        canSchedule && !isScheduling
+                    className={`w-full flex items-center justify-center gap-3 px-8 py-4 font-bold text-lg rounded-2xl transition-all ${canSchedule && !isScheduling
                             ? 'bg-white text-slate-900 hover:bg-slate-100 hover:scale-[1.02]'
                             : 'bg-slate-700 text-slate-500 cursor-not-allowed'
-                    }`}
+                        }`}
                 >
                     {isScheduling ? (
                         <>

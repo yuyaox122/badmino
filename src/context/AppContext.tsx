@@ -2,7 +2,6 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { Player, Match } from '@/types';
-import { mockCurrentUser, mockPlayers } from '@/lib/mock-data';
 
 interface AppContextType {
     // User state
@@ -48,12 +47,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
     const [viewMode, setViewMode] = useState<'cards' | 'map'>('cards');
     const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
 
-    // Initialize with mock data for demo
+    // Initialize location
     useEffect(() => {
-        // Simulating logged in state for demo
-        setCurrentUser(mockCurrentUser);
-        setDiscoverPlayers(mockPlayers);
-
         // Set default user location (Birmingham)
         setUserLocation({ lat: 52.4862, lng: -1.8904 });
 

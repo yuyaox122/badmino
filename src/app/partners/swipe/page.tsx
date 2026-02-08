@@ -1,12 +1,12 @@
 'use client';
 
-import React, { useState, useMemo, Suspense } from 'react';
+import React, { useState, useEffect, useMemo, Suspense } from 'react';
 import { motion, AnimatePresence, PanInfo } from 'framer-motion';
-import { 
-    Heart, 
-    X, 
-    Star, 
-    MapPin, 
+import {
+    Heart,
+    X,
+    Star,
+    MapPin,
     Sparkles,
     MessageCircle,
     Calendar,
@@ -15,11 +15,12 @@ import {
 } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useUser } from '@/context/UserContext';
-import { mockPlayers } from '@/lib/mock-data';
+import { playersAPI, matchesAPI } from '@/lib/api/client';
+import { Player } from '@/types';
 import Link from 'next/link';
 
 interface SwipeCardProps {
-    player: typeof mockPlayers[0];
+    player: Player;
     onSwipe: (direction: 'left' | 'right') => void;
     compatibility: number;
 }
@@ -56,7 +57,7 @@ function SwipeCard({ player, onSwipe, compatibility }: SwipeCardProps) {
             onDragEnd={handleDragEnd}
             initial={{ scale: 0.95, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            exit={{ 
+            exit={{
                 x: dragDirection === 'right' ? 300 : -300,
                 opacity: 0,
                 rotate: dragDirection === 'right' ? 20 : -20,
@@ -153,28 +154,34 @@ function PartnerSwipeContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const { user } = useUser();
-    
-    const [currentIndex, setCurrentIndex] = useState(0);
+
+    const [players, setPlayers] = useState<Player[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
     const [swipedIds, setSwipedIds] = useState<string[]>([]);
     const [showMatch, setShowMatch] = useState(false);
-    const [matchedPlayer, setMatchedPlayer] = useState<typeof mockPlayers[0] | null>(null);
+    const [matchedPlayer, setMatchedPlayer] = useState<Player | null>(null);
 
-    // Filter players based on preferences (simplified for demo)
+    // Fetch players from database
+    useEffect(() => {
+        playersAPI.getForSwiping()
+            .then(data => setPlayers(data))
+            .catch(err => console.error('Failed to load players:', err))
+            .finally(() => setIsLoading(false));
+    }, []);
+
     const potentialPartners = useMemo(() => {
-        return mockPlayers.filter(p => p.id !== user?.id && !swipedIds.includes(p.id));
-    }, [user?.id, swipedIds]);
+        return players.filter(p => !swipedIds.includes(p.id));
+    }, [players, swipedIds]);
 
-    const currentPlayer = potentialPartners[currentIndex];
+    const currentPlayer = potentialPartners[0];
 
     // Calculate compatibility score (simplified)
-    const calculateCompatibility = (player: typeof mockPlayers[0]) => {
+    const calculateCompatibility = (player: Player) => {
         let score = 50;
         if (user) {
-            // Similar skill level adds points
             const skillDiff = Math.abs(player.skillLevel - (user.skillLevel || 5));
             score += Math.max(0, 30 - skillDiff * 5);
-            
-            // Same play style adds points
+
             if (player.playStyle === user.playStyle || player.playStyle === 'both') {
                 score += 20;
             }
@@ -182,26 +189,24 @@ function PartnerSwipeContent() {
         return Math.min(99, score);
     };
 
-    const handleSwipe = (direction: 'left' | 'right') => {
+    const handleSwipe = async (direction: 'left' | 'right') => {
         if (!currentPlayer) return;
 
         setSwipedIds(prev => [...prev, currentPlayer.id]);
 
-        if (direction === 'right') {
-            // Simulate 30% chance of match for demo
-            const isMatch = Math.random() > 0.7;
-            if (isMatch) {
+        try {
+            const result = await matchesAPI.swipe(
+                currentPlayer.id,
+                direction === 'right' ? 'like' : 'pass'
+            );
+
+            if (result.isMatch) {
                 setMatchedPlayer(currentPlayer);
                 setShowMatch(true);
             }
+        } catch (err) {
+            console.error('Failed to record swipe:', err);
         }
-
-        // Move to next card with slight delay for animation
-        setTimeout(() => {
-            if (currentIndex < potentialPartners.length - 1) {
-                setCurrentIndex(0);
-            }
-        }, 300);
     };
 
     const handleUndo = () => {
@@ -209,6 +214,14 @@ function PartnerSwipeContent() {
             setSwipedIds(prev => prev.slice(0, -1));
         }
     };
+
+    if (isLoading) {
+        return (
+            <div className="min-h-screen bg-slate-900 flex items-center justify-center">
+                <div className="animate-pulse text-sky-500">Loading players...</div>
+            </div>
+        );
+    }
 
     // Match Animation Popup
     if (showMatch && matchedPlayer) {
@@ -228,7 +241,7 @@ function PartnerSwipeContent() {
                     >
                         <Sparkles className="w-20 h-20 mx-auto text-yellow-300" />
                     </motion.div>
-                    
+
                     <motion.h1
                         initial={{ y: 20, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
@@ -237,7 +250,7 @@ function PartnerSwipeContent() {
                     >
                         It&apos;s a Match!
                     </motion.h1>
-                    
+
                     <motion.p
                         initial={{ y: 20, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
@@ -316,7 +329,6 @@ function PartnerSwipeContent() {
                         <button
                             onClick={() => {
                                 setSwipedIds([]);
-                                setCurrentIndex(0);
                             }}
                             className="px-6 py-3 text-white font-medium hover:bg-white/10 rounded-xl transition-colors"
                         >

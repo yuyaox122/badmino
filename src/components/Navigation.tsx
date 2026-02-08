@@ -4,11 +4,11 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-    MapPin, 
-    Users, 
-    Trophy, 
-    Building2, 
+import {
+    MapPin,
+    Users,
+    Trophy,
+    Building2,
     Calendar,
     MessageCircle,
     Clock,
@@ -39,11 +39,6 @@ const navItems: NavItem[] = [
         label: 'Locations',
         href: '/locations',
         icon: <MapPin size={18} />,
-        dropdownItems: [
-            { label: 'Find Nearby Courts', href: '/locations', icon: <Search size={16} />, description: 'Discover sports halls near you' },
-            { label: 'View Prices', href: '/locations?view=prices', icon: <DollarSign size={16} />, description: 'Compare court rental prices' },
-            { label: 'Book a Court', href: '/locations?action=book', icon: <Calendar size={16} />, description: 'Reserve your playing time' },
-        ]
     },
     {
         label: 'Partners',
@@ -128,8 +123,8 @@ export function TopNav() {
                                 >
                                     {item.label}
                                     {item.dropdownItems && (
-                                        <ChevronDown 
-                                            size={14} 
+                                        <ChevronDown
+                                            size={14}
                                             className={cn(
                                                 "transition-transform duration-200",
                                                 activeDropdown === item.label && "rotate-180"
@@ -197,13 +192,13 @@ export function TopNav() {
 // Custom Goodminton Logo
 export function GoodmintonLogo({ size = 40 }: { size?: number }) {
     return (
-        <div 
+        <div
             className="relative flex items-center justify-center"
             style={{ width: size, height: size }}
         >
             {/* Shuttlecock Logo - Dark theme */}
-            <svg 
-                viewBox="0 0 100 100" 
+            <svg
+                viewBox="0 0 100 100"
                 className="absolute inset-0 w-full h-full drop-shadow-lg"
             >
                 {/* Feathers - White/slate gradient */}
@@ -219,7 +214,7 @@ export function GoodmintonLogo({ size = 40 }: { size?: number }) {
                 />
                 {/* Cork base - Gradient */}
                 <circle cx="50" cy="65" r="25" fill="url(#corkGradientDark)" />
-                
+
                 {/* G Letter */}
                 <text
                     x="50"
@@ -232,7 +227,7 @@ export function GoodmintonLogo({ size = 40 }: { size?: number }) {
                 >
                     G
                 </text>
-                
+
                 <defs>
                     <linearGradient id="featherGradientDark" x1="0%" y1="0%" x2="100%" y2="100%">
                         <stop offset="0%" stopColor="#f1f5f9" />
