@@ -2,10 +2,10 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-    MapPin, 
-    Clock, 
-    DollarSign, 
+import {
+    MapPin,
+    Clock,
+    DollarSign,
     Star,
     Phone,
     Globe,
@@ -172,11 +172,11 @@ export default function LocationsPage() {
     const [sortBy, setSortBy] = useState<SortOption>('distance');
     const [showAvailableOnly, setShowAvailableOnly] = useState(false);
     const [favorites, setFavorites] = useState<string[]>([]);
-    
+
     // Booking flow state
     const [bookingStep, setBookingStep] = useState<BookingStep>('closed');
     const [selectedCentre, setSelectedCentre] = useState<SportsCentre | null>(null);
-    const [timeSlots, setTimeSlots] = useState<{time: string; available: boolean}[]>([]);
+    const [timeSlots, setTimeSlots] = useState<{ time: string; available: boolean }[]>([]);
     const [selectedDate, setSelectedDate] = useState<Date>(new Date());
     const [selectedSlots, setSelectedSlots] = useState<string[]>([]);
     const [isMember, setIsMember] = useState(false);
@@ -189,7 +189,7 @@ export default function LocationsPage() {
     });
 
     const toggleFavorite = (id: string) => {
-        setFavorites(prev => 
+        setFavorites(prev =>
             prev.includes(id) ? prev.filter(f => f !== id) : [...prev, id]
         );
     };
@@ -273,8 +273,8 @@ export default function LocationsPage() {
 
     return (
         <div className="min-h-screen bg-slate-900">
-            <Header 
-                title="Find Nearby Courts" 
+            <Header
+                title="Find Nearby Courts"
                 subtitle="Discover badminton courts near you"
             />
 
@@ -289,7 +289,7 @@ export default function LocationsPage() {
                         <Calendar className="w-6 h-6 text-sky-400" />
                         My Bookings
                     </h2>
-                    
+
                     {/* Mock bookings - in real app these would come from database */}
                     <div className="space-y-3">
                         <div className="flex items-center gap-4 p-4 bg-slate-700/50 rounded-xl">
@@ -304,7 +304,7 @@ export default function LocationsPage() {
                                 Confirmed
                             </span>
                         </div>
-                        
+
                         <div className="flex items-center gap-4 p-4 bg-slate-700/50 rounded-xl">
                             <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-400 to-sky-500 flex items-center justify-center">
                                 <MapPin className="w-6 h-6 text-white" />
@@ -318,7 +318,7 @@ export default function LocationsPage() {
                             </span>
                         </div>
                     </div>
-                    
+
                     <p className="text-xs text-slate-500 mt-4 text-center">
                         Your booking history will be saved here
                     </p>
@@ -331,7 +331,7 @@ export default function LocationsPage() {
                             <Filter className="w-5 h-5 text-sky-500" />
                             <span className="font-medium text-slate-200">Sort by:</span>
                         </div>
-                        
+
                         <div className="flex flex-wrap items-center gap-2">
                             {[
                                 { key: 'distance', label: 'Distance', icon: Navigation },
@@ -341,11 +341,10 @@ export default function LocationsPage() {
                                 <button
                                     key={option.key}
                                     onClick={() => setSortBy(option.key as SortOption)}
-                                    className={`flex items-center gap-2 px-4 py-2 rounded-xl font-medium transition-all ${
-                                        sortBy === option.key
+                                    className={`flex items-center gap-2 px-4 py-2 rounded-xl font-medium transition-all ${sortBy === option.key
                                             ? 'bg-white text-slate-900 shadow-lg'
                                             : 'bg-white/10 text-slate-300 hover:bg-white/20'
-                                    }`}
+                                        }`}
                                 >
                                     <option.icon className="w-4 h-4" />
                                     {option.label}
@@ -383,11 +382,10 @@ export default function LocationsPage() {
                                     className="w-full h-full object-cover"
                                 />
                                 <div className="absolute top-4 left-4">
-                                    <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                                        centre.available 
+                                    <span className={`px-3 py-1 rounded-full text-sm font-medium ${centre.available
                                             ? 'bg-green-500/20 text-green-300'
                                             : 'bg-red-500/20 text-red-300'
-                                    }`}>
+                                        }`}>
                                         {centre.available ? 'Available' : 'Fully Booked'}
                                     </span>
                                 </div>
@@ -395,12 +393,11 @@ export default function LocationsPage() {
                                     onClick={() => toggleFavorite(centre.id)}
                                     className="absolute top-4 right-4 p-2 rounded-full bg-slate-900/80 hover:bg-slate-900 transition-colors"
                                 >
-                                    <Heart 
-                                        className={`w-5 h-5 ${
-                                            favorites.includes(centre.id) 
-                                                ? 'fill-red-500 text-red-500' 
+                                    <Heart
+                                        className={`w-5 h-5 ${favorites.includes(centre.id)
+                                                ? 'fill-red-500 text-red-500'
                                                 : 'text-slate-300'
-                                        }`} 
+                                            }`}
                                     />
                                 </button>
                             </div>
@@ -452,14 +449,13 @@ export default function LocationsPage() {
                                 </div>
 
                                 <div className="flex gap-2">
-                                    <button 
+                                    <button
                                         onClick={() => startBooking(centre)}
                                         disabled={!centre.available}
-                                        className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 font-semibold rounded-xl transition-all ${
-                                            centre.available 
+                                        className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 font-semibold rounded-xl transition-all ${centre.available
                                                 ? 'bg-white text-slate-900 hover:bg-slate-100'
                                                 : 'bg-slate-700 text-slate-500 cursor-not-allowed'
-                                        }`}
+                                            }`}
                                     >
                                         {centre.available ? 'Book Now' : 'Fully Booked'}
                                     </button>
@@ -550,13 +546,12 @@ export default function LocationsPage() {
                                                     key={slot.time}
                                                     onClick={() => slot.available && toggleTimeSlot(slot.time)}
                                                     disabled={!slot.available}
-                                                    className={`py-2 px-3 rounded-xl text-sm font-medium transition-all ${
-                                                        selectedSlots.includes(slot.time)
+                                                    className={`py-2 px-3 rounded-xl text-sm font-medium transition-all ${selectedSlots.includes(slot.time)
                                                             ? 'bg-sky-500 text-white shadow-lg'
                                                             : slot.available
                                                                 ? 'bg-slate-700 text-slate-300 hover:bg-slate-600'
                                                                 : 'bg-slate-700/50 text-slate-500 cursor-not-allowed line-through'
-                                                    }`}
+                                                        }`}
                                                 >
                                                     {slot.time}
                                                 </button>
@@ -567,7 +562,7 @@ export default function LocationsPage() {
                                     {/* Membership toggle */}
                                     {selectedCentre.membershipDiscount && (
                                         <div className="mb-4">
-                                            <label className="flex items-center gap-3 p-4 bg-amber-50 rounded-2xl cursor-pointer border border-amber-100">
+                                            <label className="flex items-center gap-3 p-4 bg-amber-500/10 rounded-2xl cursor-pointer border border-amber-500/20">
                                                 <input
                                                     type="checkbox"
                                                     checked={isMember}
@@ -575,24 +570,24 @@ export default function LocationsPage() {
                                                         setIsMember(e.target.checked);
                                                         if (!e.target.checked) setMembershipCode('');
                                                     }}
-                                                    className="w-5 h-5 rounded border-amber-300 text-amber-500"
+                                                    className="w-5 h-5 rounded border-amber-500/30 text-amber-500"
                                                 />
                                                 <div className="flex-1">
-                                                    <p className="font-medium text-amber-800">I have a {selectedCentre.name} membership</p>
-                                                    <p className="text-xs text-amber-600">Get {selectedCentre.membershipDiscount}% discount with valid membership</p>
+                                                    <p className="font-medium text-amber-300">I have a {selectedCentre.name} membership</p>
+                                                    <p className="text-xs text-amber-400/70">Get {selectedCentre.membershipDiscount}% discount with valid membership</p>
                                                 </div>
                                                 <span className="text-lg">🏅</span>
                                             </label>
-                                            
+
                                             {/* Membership code input */}
                                             {isMember && (
                                                 <motion.div
                                                     initial={{ opacity: 0, height: 0 }}
                                                     animate={{ opacity: 1, height: 'auto' }}
                                                     exit={{ opacity: 0, height: 0 }}
-                                                    className="mt-3 p-4 bg-amber-50/50 rounded-xl border border-amber-100"
+                                                    className="mt-3 p-4 bg-amber-500/10 rounded-xl border border-amber-500/20"
                                                 >
-                                                    <label className="block text-sm font-medium text-amber-800 mb-2">
+                                                    <label className="block text-sm font-medium text-amber-300 mb-2">
                                                         Membership ID / Code *
                                                     </label>
                                                     <input
@@ -600,9 +595,9 @@ export default function LocationsPage() {
                                                         value={membershipCode}
                                                         onChange={(e) => setMembershipCode(e.target.value.toUpperCase())}
                                                         placeholder="Enter your membership code"
-                                                        className="w-full px-4 py-3 border border-amber-200 rounded-xl focus:ring-2 focus:ring-amber-400 focus:border-amber-400 bg-white font-mono tracking-wider uppercase"
+                                                        className="w-full px-4 py-3 border border-white/20 rounded-xl focus:ring-2 focus:ring-amber-400 focus:border-amber-400 bg-slate-900 text-white placeholder-slate-500 font-mono tracking-wider uppercase"
                                                     />
-                                                    <p className="text-xs text-amber-600 mt-2">
+                                                    <p className="text-xs text-amber-400/70 mt-2">
                                                         This code will be sent to {selectedCentre.name} to verify your membership
                                                     </p>
                                                 </motion.div>
@@ -635,11 +630,10 @@ export default function LocationsPage() {
                                     <button
                                         onClick={() => setBookingStep('details')}
                                         disabled={selectedSlots.length === 0}
-                                        className={`w-full py-4 rounded-2xl font-semibold transition-all ${
-                                            selectedSlots.length > 0
+                                        className={`w-full py-4 rounded-2xl font-semibold transition-all ${selectedSlots.length > 0
                                                 ? 'bg-white text-slate-900 hover:bg-slate-100 hover:shadow-lg'
                                                 : 'bg-slate-700 text-slate-500 cursor-not-allowed'
-                                        }`}
+                                            }`}
                                     >
                                         Continue
                                     </button>
@@ -719,11 +713,10 @@ export default function LocationsPage() {
                                     <button
                                         onClick={() => setBookingStep('review')}
                                         disabled={!bookingDetails.name || !bookingDetails.email || (isMember && !membershipCode)}
-                                        className={`w-full py-4 rounded-2xl font-semibold transition-all ${
-                                            bookingDetails.name && bookingDetails.email && (!isMember || membershipCode)
+                                        className={`w-full py-4 rounded-2xl font-semibold transition-all ${bookingDetails.name && bookingDetails.email && (!isMember || membershipCode)
                                                 ? 'bg-white text-slate-900 hover:bg-slate-100 hover:shadow-lg'
                                                 : 'bg-slate-700 text-slate-500 cursor-not-allowed'
-                                        }`}
+                                            }`}
                                     >
                                         Review Booking
                                     </button>
