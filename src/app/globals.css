@@ -46,55 +46,55 @@
   --radius-4xl: calc(var(--radius) + 16px);
 }
 
-/* Professional Modern Theme */
+/* Professional Dark Theme - Slightly Brighter */
 :root {
   --radius: 0.75rem;
   
-  /* Refined slate-indigo palette */
-  --background: #f8fafc;
-  --foreground: #1e293b;
-  --card: #ffffff;
-  --card-foreground: #1e293b;
-  --popover: #ffffff;
-  --popover-foreground: #1e293b;
+  /* Dark slate palette - slightly brighter */
+  --background: #131b2e;
+  --foreground: #f1f5f9;
+  --card: #1e293b;
+  --card-foreground: #f1f5f9;
+  --popover: #1e293b;
+  --popover-foreground: #f1f5f9;
   
-  /* Primary: Deep indigo-blue */
-  --primary: #4f46e5;
-  --primary-foreground: #ffffff;
+  /* Primary: Light slate-white */
+  --primary: #f8fafc;
+  --primary-foreground: #131b2e;
   
-  /* Secondary: Soft slate */
-  --secondary: #f1f5f9;
-  --secondary-foreground: #475569;
+  /* Secondary: Slate */
+  --secondary: #3b4a63;
+  --secondary-foreground: #e2e8f0;
   
-  /* Muted: Light slate */
-  --muted: #f8fafc;
-  --muted-foreground: #64748b;
+  /* Muted: Dark slate */
+  --muted: #1e293b;
+  --muted-foreground: #a1afc4;
   
-  /* Accent: Soft indigo */
-  --accent: #e0e7ff;
-  --accent-foreground: #3730a3;
+  /* Accent: Medium slate */
+  --accent: #4f6385;
+  --accent-foreground: #f1f5f9;
   
-  --destructive: #dc2626;
-  --border: #e2e8f0;
-  --input: #f1f5f9;
-  --ring: #4f46e5;
+  --destructive: #ef4444;
+  --border: #334155;
+  --input: #334155;
+  --ring: #94a3b8;
   
   /* Chart colors */
-  --chart-1: #4f46e5;
-  --chart-2: #6366f1;
-  --chart-3: #818cf8;
-  --chart-4: #a5b4fc;
-  --chart-5: #c7d2fe;
+  --chart-1: #f8fafc;
+  --chart-2: #e2e8f0;
+  --chart-3: #cbd5e1;
+  --chart-4: #94a3b8;
+  --chart-5: #64748b;
   
   /* Sidebar */
-  --sidebar: #f8fafc;
-  --sidebar-foreground: #1e293b;
-  --sidebar-primary: #4f46e5;
-  --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #f1f5f9;
-  --sidebar-accent-foreground: #475569;
-  --sidebar-border: #e2e8f0;
-  --sidebar-ring: #4f46e5;
+  --sidebar: #1e293b;
+  --sidebar-foreground: #f1f5f9;
+  --sidebar-primary: #f8fafc;
+  --sidebar-primary-foreground: #0f172a;
+  --sidebar-accent: #334155;
+  --sidebar-accent-foreground: #e2e8f0;
+  --sidebar-border: #334155;
+  --sidebar-ring: #94a3b8;
 }
 
 .dark {
@@ -157,24 +157,24 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: -0.01em;
 }
 
-/* Cute scrollbar */
+/* Dark scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #e0f2fe;
+  background: #1e293b;
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #38bdf8, #0ea5e9);
+  background: linear-gradient(180deg, #475569, #334155);
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, #0ea5e9, #0284c7);
+  background: linear-gradient(180deg, #64748b, #475569);
 }
 
 /* Smooth animations */
@@ -182,17 +182,17 @@ h1, h2, h3, h4, h5, h6 {
   scroll-behavior: smooth;
 }
 
-/* Cute glass effect */
+/* Dark glass effect */
 .glass {
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(30, 41, 59, 0.8);
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(186, 230, 253, 0.5);
+  border: 1px solid rgba(71, 85, 105, 0.5);
 }
 
 .glass-dark {
-  background: rgba(14, 165, 233, 0.1);
+  background: rgba(15, 23, 42, 0.9);
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(56, 189, 248, 0.3);
+  border: 1px solid rgba(51, 65, 85, 0.5);
 }
 
 /* Floating animation */
@@ -256,7 +256,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Gradient text */
 .gradient-text {
-  background: linear-gradient(135deg, #0ea5e9, #38bdf8, #7dd3fc);
+  background: linear-gradient(135deg, #f8fafc, #e2e8f0, #cbd5e1);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -264,9 +264,9 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Bubble background */
 .bubble-bg {
-  background: radial-gradient(circle at 20% 80%, rgba(56, 189, 248, 0.15) 0%, transparent 50%),
-              radial-gradient(circle at 80% 20%, rgba(14, 165, 233, 0.1) 0%, transparent 50%),
-              radial-gradient(circle at 40% 40%, rgba(125, 211, 252, 0.1) 0%, transparent 50%);
+  background: radial-gradient(circle at 20% 80%, rgba(71, 85, 105, 0.15) 0%, transparent 50%),
+              radial-gradient(circle at 80% 20%, rgba(51, 65, 85, 0.1) 0%, transparent 50%),
+              radial-gradient(circle at 40% 40%, rgba(100, 116, 139, 0.1) 0%, transparent 50%);
 }
 
 /* Wiggle animation */

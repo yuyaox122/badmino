@@ -57,19 +57,19 @@ const quickActions = [
         title: 'Find Courts',
         icon: <MapPin size={20} />,
         href: '/locations',
-        color: 'bg-sky-100 text-sky-600 hover:bg-sky-200',
+        color: 'bg-sky-500/20 text-sky-400 hover:bg-sky-500/30',
     },
     {
         title: 'Join Tournament',
         icon: <Trophy size={20} />,
         href: '/tournaments',
-        color: 'bg-amber-100 text-amber-600 hover:bg-amber-200',
+        color: 'bg-amber-500/20 text-amber-400 hover:bg-amber-500/30',
     },
     {
         title: 'Explore Clubs',
         icon: <Building2 size={20} />,
         href: '/clubs',
-        color: 'bg-purple-100 text-purple-600 hover:bg-purple-200',
+        color: 'bg-purple-500/20 text-purple-400 hover:bg-purple-500/30',
     },
 ];
 
@@ -82,8 +82,8 @@ export default function HomePage() {
             <section className="relative overflow-hidden">
                 {/* Background decorations */}
                 <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                    <div className="absolute -top-40 -right-40 w-96 h-96 bg-sky-200 rounded-full blur-3xl opacity-50" />
-                    <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-blue-200 rounded-full blur-3xl opacity-50" />
+                    <div className="absolute -top-40 -right-40 w-96 h-96 bg-sky-500/20 rounded-full blur-3xl opacity-50" />
+                    <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl opacity-50" />
                 </div>
 
                 <div className="container mx-auto px-4 py-16 md:py-24 relative">
@@ -98,21 +98,21 @@ export default function HomePage() {
                             initial={{ scale: 0 }}
                             animate={{ scale: 1 }}
                             transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-                            className="inline-flex items-center gap-2 bg-sky-100 text-sky-700 px-4 py-2 rounded-full mb-6"
+                            className="inline-flex items-center gap-2 bg-sky-500/20 text-sky-400 px-4 py-2 rounded-full mb-6"
                         >
                             <Sparkles size={16} />
                             <span className="text-sm font-medium">Welcome to Goodminton</span>
                         </motion.div>
 
                         <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6">
-                            <span className="text-gray-800">Welcome to </span>
+                            <span className="text-white">Welcome to </span>
                             <span className="bg-gradient-to-r from-sky-500 via-blue-500 to-indigo-500 bg-clip-text text-transparent">
                                 Goodminton
                             </span>
-                            <span className="text-gray-800">, </span>
+                            <span className="text-white">, </span>
                             <br className="hidden md:block" />
                             {isLoading ? (
-                                <span className="inline-block w-40 h-12 bg-gray-200 rounded-lg animate-pulse" />
+                                <span className="inline-block w-40 h-12 bg-slate-700 rounded-lg animate-pulse" />
                             ) : (
                                 <motion.span
                                     initial={{ opacity: 0, x: -20 }}
@@ -125,7 +125,7 @@ export default function HomePage() {
                             )}
                         </h1>
 
-                        <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+                        <p className="text-xl text-slate-300 max-w-2xl mx-auto">
                             Your ultimate badminton companion. Find partners, book courts, join tournaments, and connect with the community.
                         </p>
                     </motion.div>
@@ -159,10 +159,10 @@ export default function HomePage() {
                     transition={{ delay: 0.4 }}
                     className="text-center mb-12"
                 >
-                    <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+                    <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
                         Let's help you find a partner!
                     </h2>
-                    <p className="text-gray-600 max-w-xl mx-auto">
+                    <p className="text-slate-300 max-w-xl mx-auto">
                         Choose from our features below to get started on your badminton journey
                     </p>
                 </motion.div>
@@ -179,9 +179,9 @@ export default function HomePage() {
                             className="group"
                         >
                             <Link href={card.href}>
-                                <div className="relative bg-white rounded-2xl p-6 shadow-lg shadow-gray-100 border border-gray-100 overflow-hidden h-full transition-shadow hover:shadow-xl hover:shadow-sky-100">
+                                <div className="relative bg-slate-800 rounded-2xl p-6 shadow-lg shadow-black/20 border border-white/10 overflow-hidden h-full transition-shadow hover:shadow-xl hover:shadow-sky-500/10">
                                     {/* Gradient background on hover */}
-                                    <div className={`absolute inset-0 bg-gradient-to-br ${card.gradient} opacity-0 group-hover:opacity-5 transition-opacity`} />
+                                    <div className={`absolute inset-0 bg-gradient-to-br ${card.gradient} opacity-0 group-hover:opacity-10 transition-opacity`} />
                                     
                                     {/* Icon */}
                                     <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${card.gradient} flex items-center justify-center text-white mb-4 shadow-lg`}>
@@ -189,10 +189,10 @@ export default function HomePage() {
                                     </div>
 
                                     {/* Content */}
-                                    <h3 className="text-xl font-bold text-gray-800 mb-2 group-hover:text-sky-600 transition-colors">
+                                    <h3 className="text-xl font-bold text-white mb-2 group-hover:text-sky-400 transition-colors">
                                         {card.title}
                                     </h3>
-                                    <p className="text-gray-600 mb-4">
+                                    <p className="text-slate-400 mb-4">
                                         {card.description}
                                     </p>
 
@@ -239,14 +239,14 @@ export default function HomePage() {
             </section>
 
             {/* Footer */}
-            <footer className="bg-white border-t border-gray-100 py-8">
+            <footer className="bg-slate-800/80 border-t border-white/10 py-8">
                 <div className="container mx-auto px-4 text-center">
                     <div className="flex items-center justify-center gap-2 mb-4">
                         <GoodmintonLogo size={32} />
-                        <span className="text-lg font-bold text-gray-800">Goodminton</span>
+                        <span className="text-lg font-bold text-white">Goodminton</span>
                     </div>
-                    <p className="text-gray-500 text-sm">
-                        Built with ❤️ at AstonHack11 • Theme: Community - Connect, Support, Empower
+                    <p className="text-slate-400 text-sm">
+                        © 2026 Team Goodminton @ Aston University • Made with 🏸 and coffee
                     </p>
                 </div>
             </footer>

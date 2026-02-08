@@ -47,13 +47,13 @@ export default function SchedulingPage() {
 
 function SchedulingLoadingState() {
     return (
-        <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-blue-50">
+        <div className="min-h-screen bg-slate-900">
             <Header title="Schedule a Game" subtitle="Loading..." />
             <div className="container mx-auto px-4 py-6 max-w-2xl">
                 <div className="animate-pulse space-y-4">
-                    <div className="h-32 bg-gray-200 rounded-3xl"></div>
-                    <div className="h-64 bg-gray-200 rounded-3xl"></div>
-                    <div className="h-48 bg-gray-200 rounded-3xl"></div>
+                    <div className="h-32 bg-slate-800 rounded-3xl"></div>
+                    <div className="h-64 bg-slate-800 rounded-3xl"></div>
+                    <div className="h-48 bg-slate-800 rounded-3xl"></div>
                 </div>
             </div>
         </div>
@@ -230,7 +230,7 @@ function SchedulingPageContent() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-blue-50">
+        <div className="min-h-screen bg-slate-900">
             <Header 
                 title="Schedule a Game" 
                 subtitle="Plan your next badminton session"
@@ -241,35 +241,35 @@ function SchedulingPageContent() {
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="bg-white rounded-3xl shadow-lg p-6 mb-6 border border-sky-100"
+                    className="bg-slate-800 rounded-3xl shadow-lg p-6 mb-6 border border-white/10"
                 >
                     <div className="flex items-center justify-between mb-6">
-                        <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
+                        <h2 className="text-xl font-bold text-white flex items-center gap-2">
                             <Calendar className="w-6 h-6 text-sky-500" />
                             Select Date
                         </h2>
                         <div className="flex items-center gap-2">
                             <button
                                 onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1))}
-                                className="p-2 rounded-xl hover:bg-sky-50 transition-colors"
+                                className="p-2 rounded-xl hover:bg-white/10 transition-colors"
                             >
-                                <ChevronLeft className="w-5 h-5 text-gray-600" />
+                                <ChevronLeft className="w-5 h-5 text-slate-300" />
                             </button>
-                            <span className="font-semibold text-gray-800 min-w-[140px] text-center">
+                            <span className="font-semibold text-white min-w-[140px] text-center">
                                 {currentMonth.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })}
                             </span>
                             <button
                                 onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1))}
-                                className="p-2 rounded-xl hover:bg-sky-50 transition-colors"
+                                className="p-2 rounded-xl hover:bg-white/10 transition-colors"
                             >
-                                <ChevronRight className="w-5 h-5 text-gray-600" />
+                                <ChevronRight className="w-5 h-5 text-slate-300" />
                             </button>
                         </div>
                     </div>
 
                     <div className="grid grid-cols-7 gap-1 mb-2">
                         {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(day => (
-                            <div key={day} className="text-center text-sm font-medium text-gray-500 py-2">
+                            <div key={day} className="text-center text-sm font-medium text-slate-400 py-2">
                                 {day}
                             </div>
                         ))}
@@ -285,14 +285,14 @@ function SchedulingPageContent() {
                                     disabled={isPast(date)}
                                     className={`p-3 rounded-xl text-sm font-medium transition-all ${
                                         !isCurrentMonth
-                                            ? 'text-gray-300'
+                                            ? 'text-slate-600'
                                             : isPast(date)
-                                            ? 'text-gray-300 cursor-not-allowed'
+                                            ? 'text-slate-600 cursor-not-allowed'
                                             : isSelected(date)
-                                            ? 'bg-gradient-to-br from-sky-500 to-blue-600 text-white shadow-lg shadow-sky-200'
+                                            ? 'bg-white text-slate-900 shadow-lg'
                                             : isToday(date)
-                                            ? 'bg-sky-100 text-sky-700 hover:bg-sky-200'
-                                            : 'text-gray-700 hover:bg-gray-100'
+                                            ? 'bg-white/10 text-white hover:bg-white/20'
+                                            : 'text-slate-200 hover:bg-white/10'
                                     }`}
                                 >
                                     {date.getDate()}
@@ -301,7 +301,7 @@ function SchedulingPageContent() {
                         })}
                     </div>
 
-                    <p className="mt-4 text-center text-sky-600 font-medium">
+                    <p className="mt-4 text-center text-sky-400 font-medium">
                         Selected: {formatDate(selectedDate)}
                     </p>
                 </motion.div>
@@ -311,9 +311,9 @@ function SchedulingPageContent() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.1 }}
-                    className="bg-white rounded-3xl shadow-lg p-6 mb-6 border border-sky-100"
+                    className="bg-slate-800 rounded-3xl shadow-lg p-6 mb-6 border border-white/10"
                 >
-                    <h2 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+                    <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
                         <Clock className="w-6 h-6 text-sky-500" />
                         Select Time
                     </h2>
@@ -325,8 +325,8 @@ function SchedulingPageContent() {
                                 onClick={() => setSelectedTime(time)}
                                 className={`p-3 rounded-xl text-sm font-medium transition-all ${
                                     selectedTime === time
-                                        ? 'bg-gradient-to-br from-sky-500 to-blue-600 text-white shadow-lg shadow-sky-200'
-                                        : 'bg-gray-50 text-gray-700 hover:bg-sky-50 hover:text-sky-700'
+                                        ? 'bg-white text-slate-900 shadow-lg'
+                                        : 'bg-white/5 text-slate-300 hover:bg-white/10'
                                 }`}
                             >
                                 {time}
@@ -340,9 +340,9 @@ function SchedulingPageContent() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.15 }}
-                    className="bg-white rounded-3xl shadow-lg p-6 mb-6 border border-sky-100"
+                    className="bg-slate-800 rounded-3xl shadow-lg p-6 mb-6 border border-white/10"
                 >
-                    <h2 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+                    <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
                         <Clock className="w-6 h-6 text-sky-500" />
                         Duration
                     </h2>
@@ -350,17 +350,17 @@ function SchedulingPageContent() {
                     <div className="flex items-center justify-center gap-6">
                         <button
                             onClick={() => setDuration(Math.max(0.5, duration - 0.5))}
-                            className="p-4 rounded-2xl bg-sky-100 text-sky-600 hover:bg-sky-200 transition-colors"
+                            className="p-4 rounded-2xl bg-white/10 text-white hover:bg-white/20 transition-colors"
                         >
                             <Minus className="w-6 h-6" />
                         </button>
                         <div className="text-center">
-                            <span className="text-4xl font-bold text-gray-800">{duration}</span>
-                            <span className="text-lg text-gray-500 ml-2">hour{duration !== 1 ? 's' : ''}</span>
+                            <span className="text-4xl font-bold text-white">{duration}</span>
+                            <span className="text-lg text-slate-400 ml-2">hour{duration !== 1 ? 's' : ''}</span>
                         </div>
                         <button
                             onClick={() => setDuration(duration + 0.5)}
-                            className="p-4 rounded-2xl bg-sky-100 text-sky-600 hover:bg-sky-200 transition-colors"
+                            className="p-4 rounded-2xl bg-white/10 text-white hover:bg-white/20 transition-colors"
                         >
                             <Plus className="w-6 h-6" />
                         </button>
@@ -372,9 +372,9 @@ function SchedulingPageContent() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 }}
-                    className="bg-white rounded-3xl shadow-lg p-6 mb-6 border border-sky-100"
+                    className="bg-slate-800 rounded-3xl shadow-lg p-6 mb-6 border border-white/10"
                 >
-                    <h2 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+                    <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
                         <MapPin className="w-6 h-6 text-sky-500" />
                         Select Venue
                     </h2>
@@ -386,14 +386,14 @@ function SchedulingPageContent() {
                                 onClick={() => setSelectedVenueId(venue.id)}
                                 className={`flex items-center justify-between p-4 rounded-xl border-2 transition-all ${
                                     selectedVenueId === venue.id
-                                        ? 'border-sky-400 bg-sky-50'
-                                        : 'border-gray-200 hover:border-sky-200 hover:bg-sky-50/50'
+                                        ? 'border-sky-400 bg-sky-500/20'
+                                        : 'border-white/10 hover:border-white/20 hover:bg-white/5'
                                 }`}
                             >
-                                <span className={`font-medium ${selectedVenueId === venue.id ? 'text-sky-700' : 'text-gray-700'}`}>
+                                <span className={`font-medium ${selectedVenueId === venue.id ? 'text-white' : 'text-slate-200'}`}>
                                     {venue.name}
                                 </span>
-                                <span className="text-sm font-bold text-green-600">£{venue.pricePerHour}/hr</span>
+                                <span className="text-sm font-bold text-green-400">£{venue.pricePerHour}/hr</span>
                             </button>
                         ))}
                     </div>
@@ -404,17 +404,17 @@ function SchedulingPageContent() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3 }}
-                    className="bg-white rounded-3xl shadow-lg p-6 mb-6 border border-sky-100"
+                    className="bg-slate-800 rounded-3xl shadow-lg p-6 mb-6 border border-white/10"
                 >
-                    <h2 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+                    <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
                         <Users className="w-6 h-6 text-sky-500" />
                         Invite Partners ({selectedPartners.length} selected)
                     </h2>
 
                     {/* Show pre-selected partner banner if coming from match/chat */}
                     {urlPartnerId && (
-                        <div className="mb-4 p-3 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-xl">
-                            <p className="text-sm text-green-700 flex items-center gap-2">
+                        <div className="mb-4 p-3 bg-green-500/20 border border-green-500/30 rounded-xl">
+                            <p className="text-sm text-green-300 flex items-center gap-2">
                                 <Sparkles className="w-4 h-4" />
                                 <span>
                                     <strong>{connectedPartners.find(p => p.id === urlPartnerId)?.name || urlPartnerName || 'Your match'}</strong> has been pre-selected from your match! 🎉
@@ -435,9 +435,9 @@ function SchedulingPageContent() {
                                     className={`flex items-center gap-4 p-4 rounded-xl border-2 transition-all relative ${
                                         isSelected
                                             ? isPreSelected 
-                                                ? 'border-green-400 bg-green-50' 
-                                                : 'border-sky-400 bg-sky-50'
-                                            : 'border-gray-200 hover:border-sky-200 hover:bg-sky-50/50'
+                                                ? 'border-green-400 bg-green-500/20' 
+                                                : 'border-sky-400 bg-sky-500/20'
+                                            : 'border-white/10 hover:border-white/20 hover:bg-white/5'
                                     }`}
                                 >
                                     {isPreSelected && (
@@ -456,10 +456,10 @@ function SchedulingPageContent() {
                                         )}
                                     </div>
                                     <div className="text-left flex-1">
-                                        <p className={`font-medium ${isSelected ? (isPreSelected ? 'text-green-700' : 'text-sky-700') : 'text-gray-800'}`}>
+                                        <p className={`font-medium ${isSelected ? 'text-white' : 'text-slate-200'}`}>
                                             {partner.name}
                                         </p>
-                                        <p className="text-sm text-gray-500">Level {partner.skillLevel} • {partner.playStyle}</p>
+                                        <p className="text-sm text-slate-400">Level {partner.skillLevel} • {partner.playStyle}</p>
                                     </div>
                                 </button>
                             );
@@ -517,8 +517,8 @@ function SchedulingPageContent() {
                     onClick={handleCreateSchedule}
                     className={`w-full flex items-center justify-center gap-3 px-8 py-4 font-bold text-lg rounded-2xl transition-all ${
                         canSchedule && !isScheduling
-                            ? 'bg-gradient-to-r from-sky-500 to-blue-600 text-white shadow-lg shadow-sky-200 hover:shadow-xl hover:scale-[1.02]'
-                            : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                            ? 'bg-white text-slate-900 hover:bg-slate-100 hover:scale-[1.02]'
+                            : 'bg-slate-700 text-slate-500 cursor-not-allowed'
                     }`}
                 >
                     {isScheduling ? (
@@ -526,7 +526,7 @@ function SchedulingPageContent() {
                             <motion.div
                                 animate={{ rotate: 360 }}
                                 transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-                                className="w-6 h-6 border-2 border-white border-t-transparent rounded-full"
+                                className="w-6 h-6 border-2 border-slate-900 border-t-transparent rounded-full"
                             />
                             Creating...
                         </>
@@ -540,7 +540,7 @@ function SchedulingPageContent() {
                 </motion.button>
 
                 {!canSchedule && (
-                    <p className="text-center text-gray-500 mt-4 text-sm">
+                    <p className="text-center text-slate-400 mt-4 text-sm">
                         Select a date, time, venue, and at least one partner to continue
                     </p>
                 )}

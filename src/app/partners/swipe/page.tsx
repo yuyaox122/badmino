@@ -63,7 +63,7 @@ function SwipeCard({ player, onSwipe, compatibility }: SwipeCardProps) {
             }}
             transition={{ type: 'spring', stiffness: 300, damping: 20 }}
         >
-            <div className="relative bg-white rounded-3xl shadow-2xl overflow-hidden">
+            <div className="relative bg-slate-800 rounded-3xl shadow-2xl overflow-hidden border border-white/10">
                 {/* Like/Pass Overlay */}
                 <AnimatePresence>
                     {dragDirection === 'right' && (
@@ -121,24 +121,24 @@ function SwipeCard({ player, onSwipe, compatibility }: SwipeCardProps) {
                 <div className="p-5">
                     {/* Skill & Style */}
                     <div className="flex items-center gap-2 mb-3">
-                        <span className="px-3 py-1 bg-sky-100 text-sky-700 rounded-full text-sm font-medium">
+                        <span className="px-3 py-1 bg-sky-500/20 text-sky-300 rounded-full text-sm font-medium">
                             Level {player.skillLevel}
                         </span>
-                        <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium capitalize">
+                        <span className="px-3 py-1 bg-blue-500/20 text-blue-300 rounded-full text-sm font-medium capitalize">
                             {player.playStyle}
                         </span>
-                        <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium">
+                        <span className="px-3 py-1 bg-green-500/20 text-green-300 rounded-full text-sm font-medium">
                             {player.stats.winRate}% WR
                         </span>
                     </div>
 
                     {/* Bio */}
-                    <p className="text-gray-600 text-sm mb-3 line-clamp-2">{player.bio}</p>
+                    <p className="text-slate-300 text-sm mb-3 line-clamp-2">{player.bio}</p>
 
                     {/* Looking For */}
                     <div className="flex flex-wrap gap-1">
                         {player.lookingFor.map(item => (
-                            <span key={item} className="px-2 py-0.5 bg-gray-100 text-gray-600 rounded text-xs capitalize">
+                            <span key={item} className="px-2 py-0.5 bg-white/10 text-slate-300 rounded text-xs capitalize">
                                 {item}
                             </span>
                         ))}
@@ -299,17 +299,17 @@ function PartnerSwipeContent() {
     // No more players
     if (!currentPlayer || potentialPartners.length === 0) {
         return (
-            <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-blue-50 flex items-center justify-center p-4">
+            <div className="min-h-screen bg-slate-900 flex items-center justify-center p-4">
                 <div className="text-center">
-                    <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-sky-100 flex items-center justify-center">
+                    <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-white/10 flex items-center justify-center">
                         <Heart className="w-12 h-12 text-sky-400" />
                     </div>
-                    <h2 className="text-2xl font-bold text-gray-800 mb-2">No More Players</h2>
-                    <p className="text-gray-500 mb-6">You&apos;ve seen all potential partners in your area!</p>
+                    <h2 className="text-2xl font-bold text-white mb-2">No More Players</h2>
+                    <p className="text-slate-400 mb-6">You&apos;ve seen all potential partners in your area!</p>
                     <div className="flex flex-col gap-3">
                         <Link
                             href="/partners/preferences"
-                            className="px-6 py-3 bg-sky-500 text-white font-semibold rounded-xl hover:bg-sky-600 transition-colors"
+                            className="px-6 py-3 bg-white text-slate-900 font-semibold rounded-xl hover:bg-slate-100 transition-colors"
                         >
                             Update Preferences
                         </Link>
@@ -318,7 +318,7 @@ function PartnerSwipeContent() {
                                 setSwipedIds([]);
                                 setCurrentIndex(0);
                             }}
-                            className="px-6 py-3 text-sky-600 font-medium hover:bg-sky-50 rounded-xl transition-colors"
+                            className="px-6 py-3 text-white font-medium hover:bg-white/10 rounded-xl transition-colors"
                         >
                             Start Over
                         </button>
@@ -329,20 +329,20 @@ function PartnerSwipeContent() {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-blue-50">
+        <div className="min-h-screen bg-slate-900">
             {/* Header */}
-            <div className="sticky top-16 z-30 bg-white/80 backdrop-blur-xl border-b border-gray-100">
+            <div className="sticky top-16 z-30 bg-slate-800/80 backdrop-blur-xl border-b border-white/10">
                 <div className="container mx-auto px-4 py-3">
                     <div className="flex items-center justify-between">
                         <button
                             onClick={() => router.back()}
-                            className="flex items-center gap-2 text-gray-600 hover:text-gray-800"
+                            className="flex items-center gap-2 text-slate-300 hover:text-white"
                         >
                             <ChevronLeft className="w-5 h-5" />
                             Back
                         </button>
-                        <h1 className="text-lg font-bold text-gray-800">Find Partners</h1>
-                        <span className="text-sm text-gray-500">
+                        <h1 className="text-lg font-bold text-white">Find Partners</h1>
+                        <span className="text-sm text-slate-400">
                             {potentialPartners.length} left
                         </span>
                     </div>
@@ -369,13 +369,13 @@ function PartnerSwipeContent() {
                     <button
                         onClick={handleUndo}
                         disabled={swipedIds.length === 0}
-                        className="w-14 h-14 rounded-full bg-white shadow-lg flex items-center justify-center text-yellow-500 hover:scale-110 transition-transform disabled:opacity-30 disabled:hover:scale-100"
+                        className="w-14 h-14 rounded-full bg-slate-800 border border-white/10 shadow-lg flex items-center justify-center text-yellow-500 hover:scale-110 transition-transform disabled:opacity-30 disabled:hover:scale-100"
                     >
                         <RotateCcw className="w-6 h-6" />
                     </button>
                     <button
                         onClick={() => handleSwipe('left')}
-                        className="w-16 h-16 rounded-full bg-white shadow-lg flex items-center justify-center text-red-500 hover:scale-110 hover:bg-red-50 transition-all"
+                        className="w-16 h-16 rounded-full bg-slate-800 border border-white/10 shadow-lg flex items-center justify-center text-red-500 hover:scale-110 hover:bg-red-500/10 transition-all"
                     >
                         <X className="w-8 h-8" />
                     </button>
@@ -386,7 +386,7 @@ function PartnerSwipeContent() {
                         <Heart className="w-8 h-8" />
                     </button>
                     <button
-                        className="w-14 h-14 rounded-full bg-white shadow-lg flex items-center justify-center text-sky-500 hover:scale-110 hover:bg-sky-50 transition-all"
+                        className="w-14 h-14 rounded-full bg-slate-800 border border-white/10 shadow-lg flex items-center justify-center text-sky-500 hover:scale-110 hover:bg-sky-500/10 transition-all"
                     >
                         <Star className="w-6 h-6" />
                     </button>

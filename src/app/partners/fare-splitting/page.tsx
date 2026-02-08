@@ -175,7 +175,7 @@ export default function FareSplittingPage() {
     const unpaidParticipants = allocations.filter(a => a.isIncluded && !a.isPaid);
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-blue-50">
+        <div className="min-h-screen bg-slate-900">
             <Header 
                 title="Fare Splitting" 
                 subtitle="Split court costs from scheduled sessions"
@@ -189,16 +189,16 @@ export default function FareSplittingPage() {
                         animate={{ opacity: 1, y: 0 }}
                         className="space-y-4"
                     >
-                        <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                        <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
                             <Calendar className="w-6 h-6 text-sky-500" />
                             Select a Scheduled Session
                         </h2>
 
                         {sessions.length === 0 ? (
-                            <div className="bg-white rounded-3xl shadow-lg p-8 text-center border border-sky-100">
-                                <Calendar className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                                <h3 className="text-lg font-semibold text-gray-600 mb-2">No Scheduled Sessions</h3>
-                                <p className="text-gray-500">Schedule a game first to split costs with your partners.</p>
+                            <div className="bg-slate-800 rounded-3xl shadow-lg p-8 text-center border border-white/10">
+                                <Calendar className="w-16 h-16 text-slate-600 mx-auto mb-4" />
+                                <h3 className="text-lg font-semibold text-slate-300 mb-2">No Scheduled Sessions</h3>
+                                <p className="text-slate-400">Schedule a game first to split costs with your partners.</p>
                             </div>
                         ) : (
                             sessions.map((session) => (
@@ -207,15 +207,15 @@ export default function FareSplittingPage() {
                                     whileHover={{ scale: 1.02 }}
                                     whileTap={{ scale: 0.98 }}
                                     onClick={() => setSelectedSessionId(session.id)}
-                                    className="w-full bg-white rounded-2xl shadow-lg p-5 border border-sky-100 hover:border-sky-300 transition-all text-left"
+                                    className="w-full bg-slate-800 rounded-2xl shadow-lg p-5 border border-white/10 hover:border-white/20 transition-all text-left"
                                 >
                                     <div className="flex justify-between items-start">
                                         <div className="flex-1">
                                             <div className="flex items-center gap-2 mb-2">
                                                 <MapPin className="w-4 h-4 text-sky-500" />
-                                                <span className="font-semibold text-gray-800">{session.venue.name}</span>
+                                                <span className="font-semibold text-white">{session.venue.name}</span>
                                             </div>
-                                            <div className="flex items-center gap-4 text-sm text-gray-500">
+                                            <div className="flex items-center gap-4 text-sm text-slate-400">
                                                 <span className="flex items-center gap-1">
                                                     <Calendar className="w-4 h-4" />
                                                     {new Date(session.date).toLocaleDateString('en-GB', { 
@@ -234,13 +234,13 @@ export default function FareSplittingPage() {
                                                 </span>
                                             </div>
                                             <div className="mt-3 flex items-center gap-2">
-                                                <span className="text-2xl font-bold text-sky-600">
+                                                <span className="text-2xl font-bold text-sky-400">
                                                     {formatCurrency(session.totalCost)}
                                                 </span>
-                                                <span className="text-sm text-gray-500">total</span>
+                                                <span className="text-sm text-slate-400">total</span>
                                             </div>
                                         </div>
-                                        <ChevronRight className="w-6 h-6 text-gray-400" />
+                                        <ChevronRight className="w-6 h-6 text-slate-500" />
                                     </div>
                                     
                                     {/* Participant avatars */}
@@ -248,13 +248,13 @@ export default function FareSplittingPage() {
                                         {session.participants.slice(0, 5).map((p, i) => (
                                             <div
                                                 key={p.id}
-                                                className="w-8 h-8 rounded-full bg-gradient-to-br from-sky-400 to-blue-500 border-2 border-white flex items-center justify-center text-white text-xs font-bold"
+                                                className="w-8 h-8 rounded-full bg-gradient-to-br from-sky-400 to-blue-500 border-2 border-slate-800 flex items-center justify-center text-white text-xs font-bold"
                                             >
                                                 {p.name.charAt(0)}
                                             </div>
                                         ))}
                                         {session.participants.length > 5 && (
-                                            <div className="w-8 h-8 rounded-full bg-gray-200 border-2 border-white flex items-center justify-center text-gray-600 text-xs font-bold">
+                                            <div className="w-8 h-8 rounded-full bg-slate-700 border-2 border-slate-800 flex items-center justify-center text-slate-300 text-xs font-bold">
                                                 +{session.participants.length - 5}
                                             </div>
                                         )}
@@ -270,20 +270,20 @@ export default function FareSplittingPage() {
                         className="space-y-4"
                     >
                         {/* Session Header */}
-                        <div className="bg-white rounded-3xl shadow-lg p-6 border border-sky-100">
+                        <div className="bg-slate-800 rounded-3xl shadow-lg p-6 border border-white/10">
                             <button
                                 onClick={() => setSelectedSessionId(null)}
-                                className="text-sky-500 text-sm font-medium mb-4 hover:text-sky-600"
+                                className="text-sky-400 text-sm font-medium mb-4 hover:text-sky-300"
                             >
                                 ← Back to sessions
                             </button>
                             
                             <div className="flex items-center gap-2 mb-2">
                                 <MapPin className="w-5 h-5 text-sky-500" />
-                                <h2 className="text-xl font-bold text-gray-800">{selectedSession.venue.name}</h2>
+                                <h2 className="text-xl font-bold text-white">{selectedSession.venue.name}</h2>
                             </div>
                             
-                            <div className="flex items-center gap-4 text-sm text-gray-500 mb-4">
+                            <div className="flex items-center gap-4 text-sm text-slate-400 mb-4">
                                 <span className="flex items-center gap-1">
                                     <Calendar className="w-4 h-4" />
                                     {new Date(selectedSession.date).toLocaleDateString('en-GB', { 
@@ -298,14 +298,14 @@ export default function FareSplittingPage() {
                                 </span>
                             </div>
 
-                            <div className="flex items-center justify-between bg-sky-50 rounded-2xl p-4">
+                            <div className="flex items-center justify-between bg-white/5 rounded-2xl p-4">
                                 <div>
-                                    <p className="text-sm text-gray-500">Total Cost</p>
-                                    <p className="text-3xl font-bold text-sky-600">{formatCurrency(selectedSession.totalCost)}</p>
+                                    <p className="text-sm text-slate-400">Total Cost</p>
+                                    <p className="text-3xl font-bold text-sky-400">{formatCurrency(selectedSession.totalCost)}</p>
                                 </div>
                                 <div className="text-right">
-                                    <p className="text-sm text-gray-500">Per Person (equal)</p>
-                                    <p className="text-xl font-semibold text-gray-700">
+                                    <p className="text-sm text-slate-400">Per Person (equal)</p>
+                                    <p className="text-xl font-semibold text-slate-200">
                                         {formatCurrency(selectedSession.totalCost / includedCount || 0)}
                                     </p>
                                 </div>
@@ -351,8 +351,8 @@ export default function FareSplittingPage() {
                         </div>
 
                         {/* Payment Allocations */}
-                        <div className="bg-white rounded-3xl shadow-lg p-6 border border-sky-100">
-                            <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                        <div className="bg-slate-800 rounded-3xl shadow-lg p-6 border border-white/10">
+                            <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
                                 <Calculator className="w-5 h-5 text-sky-500" />
                                 Payment Allocations
                             </h3>
@@ -363,8 +363,8 @@ export default function FareSplittingPage() {
                                         key={allocation.participantId}
                                         className={`p-4 rounded-2xl transition-all ${
                                             allocation.isIncluded 
-                                                ? 'bg-white border-2 border-gray-100' 
-                                                : 'bg-gray-50 border-2 border-dashed border-gray-200 opacity-60'
+                                                ? 'bg-slate-700/50 border-2 border-white/10' 
+                                                : 'bg-slate-800/50 border-2 border-dashed border-white/10 opacity-60'
                                         }`}
                                     >
                                         <div className="flex items-center justify-between mb-3">
@@ -373,8 +373,8 @@ export default function FareSplittingPage() {
                                                     {allocation.name.charAt(0)}
                                                 </div>
                                                 <div>
-                                                    <p className="font-semibold text-gray-800">{allocation.name}</p>
-                                                    <p className="text-xs text-gray-500">
+                                                    <p className="font-semibold text-white">{allocation.name}</p>
+                                                    <p className="text-xs text-slate-400">
                                                         {allocation.percentage.toFixed(1)}% of total
                                                     </p>
                                                 </div>
@@ -467,7 +467,7 @@ export default function FareSplittingPage() {
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
-                            className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50"
+                            className="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50"
                             onClick={() => setShowWarning(false)}
                         >
                             <motion.div
@@ -475,22 +475,22 @@ export default function FareSplittingPage() {
                                 animate={{ scale: 1, opacity: 1 }}
                                 exit={{ scale: 0.9, opacity: 0 }}
                                 onClick={(e) => e.stopPropagation()}
-                                className="bg-white rounded-3xl p-6 max-w-sm w-full"
+                                className="bg-slate-800 rounded-3xl p-6 max-w-sm w-full border border-white/10"
                             >
                                 <div className="text-center">
-                                    <div className="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                                        <AlertTriangle className="w-8 h-8 text-amber-500" />
+                                    <div className="w-16 h-16 bg-amber-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                                        <AlertTriangle className="w-8 h-8 text-amber-400" />
                                     </div>
-                                    <h3 className="text-xl font-bold text-gray-800 mb-2">Amounts Don't Match</h3>
-                                    <p className="text-gray-600 mb-4">
+                                    <h3 className="text-xl font-bold text-white mb-2">Amounts Don't Match</h3>
+                                    <p className="text-slate-300 mb-4">
                                         The total allocated ({formatCurrency(totalAllocated)}) doesn't match the session cost ({formatCurrency(selectedSession?.totalCost || 0)}).
                                     </p>
-                                    <p className="text-sm text-gray-500 mb-6">
+                                    <p className="text-sm text-slate-400 mb-6">
                                         Adjust the sliders or click "Reset Equal" to balance.
                                     </p>
                                     <button
                                         onClick={() => setShowWarning(false)}
-                                        className="w-full py-3 bg-sky-500 text-white rounded-xl font-semibold hover:bg-sky-600 transition-colors"
+                                        className="w-full py-3 bg-white text-slate-900 rounded-xl font-semibold hover:bg-slate-100 transition-colors"
                                     >
                                         Got it
                                     </button>
@@ -507,7 +507,7 @@ export default function FareSplittingPage() {
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
-                            className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50"
+                            className="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50"
                             onClick={() => setShowSuccessModal(false)}
                         >
                             <motion.div
@@ -515,11 +515,11 @@ export default function FareSplittingPage() {
                                 animate={{ scale: 1, opacity: 1, y: 0 }}
                                 exit={{ scale: 0.9, opacity: 0, y: 20 }}
                                 onClick={(e) => e.stopPropagation()}
-                                className="bg-white rounded-3xl p-6 max-w-md w-full shadow-2xl"
+                                className="bg-slate-800 rounded-3xl p-6 max-w-md w-full shadow-2xl border border-white/10"
                             >
                                 <button
                                     onClick={() => setShowSuccessModal(false)}
-                                    className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+                                    className="absolute top-4 right-4 text-slate-400 hover:text-white"
                                 >
                                     <X className="w-5 h-5" />
                                 </button>
@@ -529,25 +529,25 @@ export default function FareSplittingPage() {
                                         initial={{ scale: 0 }}
                                         animate={{ scale: 1 }}
                                         transition={{ type: "spring", delay: 0.2 }}
-                                        className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4"
+                                        className="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4"
                                     >
-                                        <CheckCircle2 className="w-10 h-10 text-green-500" />
+                                        <CheckCircle2 className="w-10 h-10 text-green-400" />
                                     </motion.div>
-                                    <h3 className="text-2xl font-bold text-gray-800 mb-2">Allocations Saved! 🎉</h3>
-                                    <p className="text-gray-600">
+                                    <h3 className="text-2xl font-bold text-white mb-2">Allocations Saved! 🎉</h3>
+                                    <p className="text-slate-300">
                                         Payment splits have been updated for all participants.
                                     </p>
                                 </div>
 
                                 {/* Unpaid participants summary */}
                                 {unpaidParticipants.length > 0 && (
-                                    <div className="bg-amber-50 rounded-2xl p-4 mb-6 border border-amber-100">
-                                        <p className="text-sm text-amber-700 font-medium mb-2">
+                                    <div className="bg-amber-500/20 rounded-2xl p-4 mb-6 border border-amber-500/30">
+                                        <p className="text-sm text-amber-400 font-medium mb-2">
                                             {unpaidParticipants.length} participant{unpaidParticipants.length > 1 ? 's' : ''} still need to pay:
                                         </p>
                                         <div className="flex flex-wrap gap-2">
                                             {unpaidParticipants.map(p => (
-                                                <span key={p.participantId} className="px-3 py-1 bg-white rounded-full text-sm text-gray-700 border border-amber-200">
+                                                <span key={p.participantId} className="px-3 py-1 bg-slate-700 rounded-full text-sm text-white border border-amber-500/30">
                                                     {p.name} • {formatCurrency(p.amount)}
                                                 </span>
                                             ))}
@@ -575,7 +575,7 @@ export default function FareSplittingPage() {
 
                                     <button
                                         onClick={() => setShowSuccessModal(false)}
-                                        className="w-full flex items-center justify-center gap-3 py-4 bg-gray-100 text-gray-700 rounded-2xl font-semibold hover:bg-gray-200 transition-all"
+                                        className="w-full flex items-center justify-center gap-3 py-4 bg-slate-700 text-white rounded-2xl font-semibold hover:bg-slate-600 transition-all"
                                     >
                                         <MessageCircle className="w-5 h-5" />
                                         Open Group Chat
@@ -610,7 +610,7 @@ export default function FareSplittingPage() {
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
-                            className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50"
+                            className="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50"
                             onClick={() => setShowPaymentSimulation(false)}
                         >
                             <motion.div
@@ -618,40 +618,40 @@ export default function FareSplittingPage() {
                                 animate={{ scale: 1, opacity: 1 }}
                                 exit={{ scale: 0.9, opacity: 0 }}
                                 onClick={(e) => e.stopPropagation()}
-                                className="bg-white rounded-3xl p-6 max-w-md w-full shadow-2xl"
+                                className="bg-slate-800 rounded-3xl p-6 max-w-md w-full shadow-2xl border border-white/10"
                             >
                                 {paymentStep === 'details' && (
                                     <>
                                         <div className="text-center mb-6">
-                                            <div className="w-16 h-16 bg-sky-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                                                <CreditCard className="w-8 h-8 text-sky-500" />
+                                            <div className="w-16 h-16 bg-sky-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                                                <CreditCard className="w-8 h-8 text-sky-400" />
                                             </div>
-                                            <h3 className="text-xl font-bold text-gray-800 mb-2">Collect Payment</h3>
-                                            <p className="text-gray-600">Simulated payment collection</p>
+                                            <h3 className="text-xl font-bold text-white mb-2">Collect Payment</h3>
+                                            <p className="text-slate-300">Simulated payment collection</p>
                                         </div>
 
                                         <div className="space-y-4 mb-6">
-                                            <div className="bg-gray-50 rounded-2xl p-4">
-                                                <p className="text-sm text-gray-500 mb-1">Total to collect</p>
-                                                <p className="text-3xl font-bold text-gray-800">
+                                            <div className="bg-slate-700/50 rounded-2xl p-4">
+                                                <p className="text-sm text-slate-400 mb-1">Total to collect</p>
+                                                <p className="text-3xl font-bold text-white">
                                                     {formatCurrency(unpaidParticipants.reduce((sum, p) => sum + p.amount, 0))}
                                                 </p>
                                             </div>
 
                                             <div className="space-y-2">
-                                                <p className="text-sm font-medium text-gray-700">Payment Method</p>
+                                                <p className="text-sm font-medium text-slate-300">Payment Method</p>
                                                 <div className="grid grid-cols-3 gap-2">
-                                                    <button className="p-3 border-2 border-sky-500 bg-sky-50 rounded-xl text-center">
+                                                    <button className="p-3 border-2 border-sky-500 bg-sky-500/20 rounded-xl text-center">
                                                         <span className="text-2xl">💳</span>
-                                                        <p className="text-xs mt-1 font-medium text-sky-600">Card</p>
+                                                        <p className="text-xs mt-1 font-medium text-sky-400">Card</p>
                                                     </button>
-                                                    <button className="p-3 border-2 border-gray-200 rounded-xl text-center hover:border-gray-300">
+                                                    <button className="p-3 border-2 border-white/10 rounded-xl text-center hover:border-white/20">
                                                         <span className="text-2xl">🏦</span>
-                                                        <p className="text-xs mt-1 text-gray-500">Bank</p>
+                                                        <p className="text-xs mt-1 text-slate-400">Bank</p>
                                                     </button>
-                                                    <button className="p-3 border-2 border-gray-200 rounded-xl text-center hover:border-gray-300">
+                                                    <button className="p-3 border-2 border-white/10 rounded-xl text-center hover:border-white/20">
                                                         <span className="text-2xl">📱</span>
-                                                        <p className="text-xs mt-1 text-gray-500">PayPal</p>
+                                                        <p className="text-xs mt-1 text-slate-400">PayPal</p>
                                                     </button>
                                                 </div>
                                             </div>
@@ -660,13 +660,13 @@ export default function FareSplittingPage() {
                                         <div className="flex gap-3">
                                             <button
                                                 onClick={() => setShowPaymentSimulation(false)}
-                                                className="flex-1 py-3 bg-gray-100 text-gray-700 rounded-xl font-semibold hover:bg-gray-200"
+                                                className="flex-1 py-3 bg-slate-700 text-white rounded-xl font-semibold hover:bg-slate-600"
                                             >
                                                 Cancel
                                             </button>
                                             <button
                                                 onClick={processPayment}
-                                                className="flex-1 py-3 bg-sky-500 text-white rounded-xl font-semibold hover:bg-sky-600"
+                                                className="flex-1 py-3 bg-white text-slate-900 rounded-xl font-semibold hover:bg-slate-100"
                                             >
                                                 Process Payment
                                             </button>
@@ -679,10 +679,10 @@ export default function FareSplittingPage() {
                                         <motion.div
                                             animate={{ rotate: 360 }}
                                             transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                                            className="w-16 h-16 border-4 border-sky-200 border-t-sky-500 rounded-full mx-auto mb-4"
+                                            className="w-16 h-16 border-4 border-sky-500/30 border-t-sky-500 rounded-full mx-auto mb-4"
                                         />
-                                        <h3 className="text-xl font-bold text-gray-800 mb-2">Processing Payment...</h3>
-                                        <p className="text-gray-600">Please wait while we process your payment</p>
+                                        <h3 className="text-xl font-bold text-white mb-2">Processing Payment...</h3>
+                                        <p className="text-slate-300">Please wait while we process your payment</p>
                                     </div>
                                 )}
 
@@ -692,12 +692,12 @@ export default function FareSplittingPage() {
                                             initial={{ scale: 0 }}
                                             animate={{ scale: 1 }}
                                             transition={{ type: "spring" }}
-                                            className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4"
+                                            className="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4"
                                         >
-                                            <CheckCircle2 className="w-10 h-10 text-green-500" />
+                                            <CheckCircle2 className="w-10 h-10 text-green-400" />
                                         </motion.div>
-                                        <h3 className="text-2xl font-bold text-gray-800 mb-2">Payment Complete! 🎉</h3>
-                                        <p className="text-gray-600 mb-6">
+                                        <h3 className="text-2xl font-bold text-white mb-2">Payment Complete! 🎉</h3>
+                                        <p className="text-slate-300 mb-6">
                                             {formatCurrency(unpaidParticipants.reduce((sum, p) => sum + p.amount, 0))} has been collected
                                         </p>
                                         <button

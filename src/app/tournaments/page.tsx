@@ -94,6 +94,48 @@ export default function TournamentsPage() {
             </div>
 
             <div className="max-w-lg mx-auto px-4 pt-4">
+                {/* My Joined/Incoming Tournaments */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="bg-gradient-to-br from-sky-500/20 to-blue-500/20 rounded-2xl p-4 mb-6 border border-sky-500/30"
+                >
+                    <h3 className="text-lg font-bold text-white mb-3 flex items-center gap-2">
+                        <Medal className="w-5 h-5 text-sky-400" />
+                        My Joined Tournaments
+                    </h3>
+                    <div className="space-y-3">
+                        {/* Mock joined tournaments */}
+                        <div className="flex items-center gap-3 p-3 bg-slate-800/60 rounded-xl">
+                            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center">
+                                <Trophy className="w-5 h-5 text-white" />
+                            </div>
+                            <div className="flex-1">
+                                <h4 className="font-semibold text-white text-sm">Aston Spring Championship</h4>
+                                <p className="text-xs text-slate-400">Feb 20, 2025 • Singles</p>
+                            </div>
+                            <Badge className="bg-green-500/20 text-green-400 border-green-500/30">
+                                Registered
+                            </Badge>
+                        </div>
+                        <div className="flex items-center gap-3 p-3 bg-slate-800/60 rounded-xl">
+                            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-cyan-400 to-blue-500 flex items-center justify-center">
+                                <Trophy className="w-5 h-5 text-white" />
+                            </div>
+                            <div className="flex-1">
+                                <h4 className="font-semibold text-white text-sm">Birmingham Open 2025</h4>
+                                <p className="text-xs text-slate-400">Mar 5, 2025 • Doubles</p>
+                            </div>
+                            <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30">
+                                Upcoming
+                            </Badge>
+                        </div>
+                    </div>
+                    <p className="text-xs text-slate-500 mt-3 text-center">
+                        View all in My Tournaments
+                    </p>
+                </motion.div>
+
                 <AnimatePresence mode="wait">
                     {viewMode === 'list' ? (
                         <motion.div

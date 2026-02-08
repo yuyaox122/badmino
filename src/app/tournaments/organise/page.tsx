@@ -206,7 +206,7 @@ function TournamentOrganiseContent() {
     // Main Selection Screen
     if (!selectedFlow) {
         return (
-            <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-blue-50">
+            <div className="min-h-screen bg-slate-900">
                 <Header 
                     title="Tournaments" 
                     subtitle="Join, organize, or work at tournaments"
@@ -219,17 +219,17 @@ function TournamentOrganiseContent() {
                         animate={{ opacity: 1, y: 0 }}
                         className="text-center mb-12"
                     >
-                        <div className="w-20 h-20 mx-auto mb-6 rounded-3xl bg-gradient-to-br from-sky-400 to-blue-500 flex items-center justify-center shadow-lg shadow-sky-200">
+                        <div className="w-20 h-20 mx-auto mb-6 rounded-3xl bg-gradient-to-br from-sky-400 to-blue-500 flex items-center justify-center shadow-lg">
                             <Trophy className="w-10 h-10 text-white" />
                         </div>
-                        <h1 className="text-3xl md:text-5xl font-bold text-gray-800 mb-4">
+                        <h1 className="text-3xl md:text-5xl font-bold text-white mb-4">
                             Willing to find competition,{' '}
-                            <span className="bg-gradient-to-r from-sky-500 to-blue-600 bg-clip-text text-transparent">
+                            <span className="bg-gradient-to-r from-sky-400 to-blue-500 bg-clip-text text-transparent">
                                 {userName}
                             </span>
                             ?
                         </h1>
-                        <p className="text-gray-500 text-lg">
+                        <p className="text-slate-400 text-lg">
                             Choose how you&apos;d like to be involved in tournaments
                         </p>
                     </motion.div>
@@ -265,18 +265,18 @@ function TournamentOrganiseContent() {
                                 animate={{ opacity: 1, x: 0 }}
                                 transition={{ delay: index * 0.1 }}
                                 onClick={() => setSelectedFlow(option.key as FlowType)}
-                                className="w-full flex items-center gap-4 p-6 bg-white rounded-2xl border-2 border-gray-100 hover:border-sky-200 hover:shadow-xl hover:shadow-sky-100 transition-all duration-300 group"
+                                className="w-full flex items-center gap-4 p-6 bg-slate-800 rounded-2xl border-2 border-white/10 hover:border-white/20 hover:shadow-xl transition-all duration-300 group"
                             >
                                 <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${option.gradient} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300`}>
                                     <option.icon className="w-7 h-7 text-white" />
                                 </div>
                                 <div className="text-left flex-1">
-                                    <h3 className="text-lg font-bold text-gray-800 group-hover:text-sky-600 transition-colors">
+                                    <h3 className="text-lg font-bold text-white group-hover:text-sky-400 transition-colors">
                                         {option.title}
                                     </h3>
-                                    <p className="text-gray-500">{option.description}</p>
+                                    <p className="text-slate-400">{option.description}</p>
                                 </div>
-                                <ArrowRight className="w-6 h-6 text-gray-300 group-hover:text-sky-500 group-hover:translate-x-1 transition-all" />
+                                <ArrowRight className="w-6 h-6 text-slate-600 group-hover:text-sky-400 group-hover:translate-x-1 transition-all" />
                             </motion.button>
                         ))}
                     </div>
@@ -288,7 +288,7 @@ function TournamentOrganiseContent() {
     // Work Flow - Show available jobs
     if (selectedFlow === 'work') {
         return (
-            <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-blue-50">
+            <div className="min-h-screen bg-slate-900">
                 <Header 
                     title="Find Tournament Jobs" 
                     subtitle="Get paid while being part of the action"
@@ -299,9 +299,9 @@ function TournamentOrganiseContent() {
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="bg-white rounded-3xl shadow-lg p-6 mb-6 border border-sky-100"
+                        className="bg-slate-800 rounded-3xl shadow-lg p-6 mb-6 border border-white/10"
                     >
-                        <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                        <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
                             <Calendar className="w-6 h-6 text-sky-500" />
                             When are you available to work?
                         </h2>
@@ -312,8 +312,8 @@ function TournamentOrganiseContent() {
                                     onClick={() => setSelectedMonth(prev => prev === month ? null : month)}
                                     className={`px-4 py-2 rounded-xl font-medium transition-all ${
                                         selectedMonth === month
-                                            ? 'bg-gradient-to-br from-sky-500 to-blue-600 text-white shadow-lg shadow-sky-200'
-                                            : 'bg-gray-100 text-gray-700 hover:bg-sky-50 hover:text-sky-700'
+                                            ? 'bg-gradient-to-br from-sky-500 to-blue-600 text-white shadow-lg'
+                                            : 'bg-white/10 text-slate-300 hover:bg-white/20 hover:text-white'
                                     }`}
                                 >
                                     {month}
@@ -328,10 +328,10 @@ function TournamentOrganiseContent() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.1 }}
                     >
-                        <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                        <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
                             <Briefcase className="w-6 h-6 text-sky-500" />
                             Available Positions
-                            {selectedMonth && <span className="text-sky-500 font-normal">in {selectedMonth}</span>}
+                            {selectedMonth && <span className="text-sky-400 font-normal">in {selectedMonth}</span>}
                         </h2>
 
                         <div className="space-y-4">
@@ -361,13 +361,13 @@ function TournamentOrganiseContent() {
                                         initial={{ opacity: 0, y: 20 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         transition={{ delay: index * 0.1 }}
-                                        className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100 hover:border-sky-200 hover:shadow-xl transition-all"
+                                        className="bg-slate-800 rounded-2xl shadow-lg p-6 border border-white/10 hover:border-white/20 hover:shadow-xl transition-all"
                                     >
                                         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                                             <div className="flex-1">
-                                                <h3 className="text-lg font-bold text-gray-800 mb-1">{job.role}</h3>
-                                                <p className="text-sky-600 font-medium mb-2">{tournament?.name || 'Tournament'}</p>
-                                                <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">
+                                                <h3 className="text-lg font-bold text-white mb-1">{job.role}</h3>
+                                                <p className="text-sky-400 font-medium mb-2">{tournament?.name || 'Tournament'}</p>
+                                                <div className="flex flex-wrap items-center gap-4 text-sm text-slate-400">
                                                     <span className="flex items-center gap-1">
                                                         <MapPin className="w-4 h-4" />
                                                         {tournament?.location.venue || 'TBD'}
@@ -381,20 +381,20 @@ function TournamentOrganiseContent() {
                                                         {job.dates?.[0] || 'Full day'}
                                                     </span>
                                                 </div>
-                                                <p className="text-sm text-gray-600 mt-2">{job.description}</p>
+                                                <p className="text-sm text-slate-300 mt-2">{job.description}</p>
                                             </div>
 
                                             <div className="flex items-center gap-4">
                                                 <div className="text-right">
-                                                    <p className="text-2xl font-bold text-green-600">£{job.wage}/hr</p>
-                                                    <p className="text-sm text-gray-500">
+                                                    <p className="text-2xl font-bold text-green-400">£{job.wage}/hr</p>
+                                                    <p className="text-sm text-slate-400">
                                                         <Users className="w-3 h-3 inline mr-1" />
                                                         {job.slots - job.filled} spots left
                                                     </p>
                                                 </div>
                                                 <Link 
                                                     href={`/tournaments/work/apply/${job.id}`}
-                                                    className="px-6 py-3 bg-gradient-to-r from-sky-500 to-blue-600 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-sky-200 transition-all"
+                                                    className="px-6 py-3 bg-white text-slate-900 font-semibold rounded-xl hover:bg-slate-100 transition-all"
                                                 >
                                                     Apply
                                                 </Link>

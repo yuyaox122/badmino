@@ -148,7 +148,7 @@ export default function CreateClubPage() {
                         className="space-y-6"
                     >
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                            <label className="block text-sm font-medium text-slate-200 mb-2">
                                 Club Name *
                             </label>
                             <input
@@ -156,15 +156,15 @@ export default function CreateClubPage() {
                                 value={formData.name}
                                 onChange={(e) => updateForm('name', e.target.value)}
                                 placeholder="e.g., Birmingham Badminton Buddies"
-                                className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-sky-400 focus:ring-4 focus:ring-sky-100 outline-none transition-all text-lg"
+                                className="w-full px-4 py-3 rounded-xl border-2 border-white/10 bg-slate-800 text-white focus:border-sky-400 focus:ring-4 focus:ring-sky-400/20 outline-none transition-all text-lg placeholder:text-slate-500"
                             />
-                            <p className="text-sm text-gray-500 mt-1">
+                            <p className="text-sm text-slate-400 mt-1">
                                 {formData.name.length}/50 characters
                             </p>
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                            <label className="block text-sm font-medium text-slate-200 mb-2">
                                 Description *
                             </label>
                             <textarea
@@ -172,9 +172,9 @@ export default function CreateClubPage() {
                                 onChange={(e) => updateForm('description', e.target.value)}
                                 placeholder="Tell potential members about your club, what makes it special, and what they can expect..."
                                 rows={4}
-                                className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-sky-400 focus:ring-4 focus:ring-sky-100 outline-none transition-all resize-none"
+                                className="w-full px-4 py-3 rounded-xl border-2 border-white/10 bg-slate-800 text-white focus:border-sky-400 focus:ring-4 focus:ring-sky-400/20 outline-none transition-all resize-none placeholder:text-slate-500"
                             />
-                            <p className="text-sm text-gray-500 mt-1">
+                            <p className="text-sm text-slate-400 mt-1">
                                 {formData.description.length}/300 characters
                             </p>
                         </div>
@@ -190,12 +190,12 @@ export default function CreateClubPage() {
                         exit={{ opacity: 0, x: -20 }}
                         className="space-y-6"
                     >
-                        <div className="bg-sky-50 rounded-2xl p-4 border border-sky-100">
+                        <div className="bg-white/5 rounded-2xl p-4 border border-white/10">
                             <div className="flex items-start gap-3">
                                 <MapPin className="w-5 h-5 text-sky-500 mt-0.5" />
                                 <div>
-                                    <h3 className="font-medium text-gray-800">Where does your club meet?</h3>
-                                    <p className="text-sm text-gray-600 mt-1">
+                                    <h3 className="font-medium text-white">Where does your club meet?</h3>
+                                    <p className="text-sm text-slate-300 mt-1">
                                         Enter the main venue or area where your club plays.
                                     </p>
                                 </div>
@@ -203,7 +203,7 @@ export default function CreateClubPage() {
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                            <label className="block text-sm font-medium text-slate-200 mb-2">
                                 Address / Venue *
                             </label>
                             <input
@@ -211,13 +211,13 @@ export default function CreateClubPage() {
                                 value={formData.address}
                                 onChange={(e) => updateForm('address', e.target.value)}
                                 placeholder="e.g., Aston University Sports Centre, Birmingham B4 7ET"
-                                className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-sky-400 focus:ring-4 focus:ring-sky-100 outline-none transition-all"
+                                className="w-full px-4 py-3 rounded-xl border-2 border-white/10 bg-slate-800 text-white focus:border-sky-400 focus:ring-4 focus:ring-sky-400/20 outline-none transition-all placeholder:text-slate-500"
                             />
                         </div>
 
-                        <div className="bg-gray-100 rounded-2xl h-48 flex items-center justify-center">
-                            <div className="text-center text-gray-500">
-                                <MapPin className="w-12 h-12 mx-auto mb-2 text-gray-400" />
+                        <div className="bg-slate-800 rounded-2xl h-48 flex items-center justify-center">
+                            <div className="text-center text-slate-500">
+                                <MapPin className="w-12 h-12 mx-auto mb-2 text-slate-600" />
                                 <p>Map preview will appear here</p>
                             </div>
                         </div>
@@ -233,12 +233,12 @@ export default function CreateClubPage() {
                         exit={{ opacity: 0, x: -20 }}
                         className="space-y-6"
                     >
-                        <div className="bg-sky-50 rounded-2xl p-4 border border-sky-100">
+                        <div className="bg-white/5 rounded-2xl p-4 border border-white/10">
                             <div className="flex items-start gap-3">
                                 <Star className="w-5 h-5 text-sky-500 mt-0.5" />
                                 <div>
-                                    <h3 className="font-medium text-gray-800">What skill levels are welcome?</h3>
-                                    <p className="text-sm text-gray-600 mt-1">
+                                    <h3 className="font-medium text-white">What skill levels are welcome?</h3>
+                                    <p className="text-sm text-slate-300 mt-1">
                                         Set a range to help players find the right fit.
                                     </p>
                                 </div>
@@ -247,8 +247,8 @@ export default function CreateClubPage() {
 
                         <div className="space-y-4">
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-3">
-                                    Minimum Level: <span className="text-sky-600 font-bold">{skillLevels[formData.skillMin - 1]?.label}</span>
+                                <label className="block text-sm font-medium text-slate-200 mb-3">
+                                    Minimum Level: <span className="text-sky-400 font-bold">{skillLevels[formData.skillMin - 1]?.label}</span>
                                 </label>
                                 <input
                                     type="range"
@@ -260,17 +260,17 @@ export default function CreateClubPage() {
                                         updateForm('skillMin', val);
                                         if (val > formData.skillMax) updateForm('skillMax', val);
                                     }}
-                                    className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                                    className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer"
                                     style={{
-                                        background: `linear-gradient(to right, hsl(199, 89%, 48%) 0%, hsl(199, 89%, 48%) ${(formData.skillMin - 1) * 11.1}%, #e5e7eb ${(formData.skillMin - 1) * 11.1}%, #e5e7eb 100%)`
+                                        background: `linear-gradient(to right, hsl(199, 89%, 48%) 0%, hsl(199, 89%, 48%) ${(formData.skillMin - 1) * 11.1}%, #334155 ${(formData.skillMin - 1) * 11.1}%, #334155 100%)`
                                     }}
                                 />
-                                <p className="text-xs text-gray-500 mt-1">{skillLevels[formData.skillMin - 1]?.description}</p>
+                                <p className="text-xs text-slate-400 mt-1">{skillLevels[formData.skillMin - 1]?.description}</p>
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-3">
-                                    Maximum Level: <span className="text-sky-600 font-bold">{skillLevels[formData.skillMax - 1]?.label}</span>
+                                <label className="block text-sm font-medium text-slate-200 mb-3">
+                                    Maximum Level: <span className="text-sky-400 font-bold">{skillLevels[formData.skillMax - 1]?.label}</span>
                                 </label>
                                 <input
                                     type="range"
@@ -282,12 +282,12 @@ export default function CreateClubPage() {
                                         updateForm('skillMax', val);
                                         if (val < formData.skillMin) updateForm('skillMin', val);
                                     }}
-                                    className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                                    className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer"
                                     style={{
-                                        background: `linear-gradient(to right, hsl(199, 89%, 48%) 0%, hsl(199, 89%, 48%) ${(formData.skillMax - 1) * 11.1}%, #e5e7eb ${(formData.skillMax - 1) * 11.1}%, #e5e7eb 100%)`
+                                        background: `linear-gradient(to right, hsl(199, 89%, 48%) 0%, hsl(199, 89%, 48%) ${(formData.skillMax - 1) * 11.1}%, #334155 ${(formData.skillMax - 1) * 11.1}%, #334155 100%)`
                                     }}
                                 />
-                                <p className="text-xs text-gray-500 mt-1">{skillLevels[formData.skillMax - 1]?.description}</p>
+                                <p className="text-xs text-slate-400 mt-1">{skillLevels[formData.skillMax - 1]?.description}</p>
                             </div>
                         </div>
 
@@ -309,12 +309,12 @@ export default function CreateClubPage() {
                         exit={{ opacity: 0, x: -20 }}
                         className="space-y-6"
                     >
-                        <div className="bg-sky-50 rounded-2xl p-4 border border-sky-100">
+                        <div className="bg-white/5 rounded-2xl p-4 border border-white/10">
                             <div className="flex items-start gap-3">
                                 <Calendar className="w-5 h-5 text-sky-500 mt-0.5" />
                                 <div>
-                                    <h3 className="font-medium text-gray-800">When does your club usually meet?</h3>
-                                    <p className="text-sm text-gray-600 mt-1">
+                                    <h3 className="font-medium text-white">When does your club usually meet?</h3>
+                                    <p className="text-sm text-slate-300 mt-1">
                                         Select all days that apply.
                                     </p>
                                 </div>
@@ -328,8 +328,8 @@ export default function CreateClubPage() {
                                     onClick={() => toggleDay(day)}
                                     className={`p-4 rounded-xl font-medium transition-all flex items-center justify-between ${
                                         formData.meetingDays.includes(day)
-                                            ? 'bg-gradient-to-br from-sky-500 to-blue-600 text-white shadow-lg shadow-sky-200'
-                                            : 'bg-gray-100 text-gray-700 hover:bg-sky-50 hover:text-sky-700'
+                                            ? 'bg-white text-slate-900 shadow-lg'
+                                            : 'bg-white/10 text-slate-200 hover:bg-white/20'
                                     }`}
                                 >
                                     {day}
@@ -339,7 +339,7 @@ export default function CreateClubPage() {
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-3">
+                            <label className="block text-sm font-medium text-slate-200 mb-3">
                                 Expected Activity Level
                             </label>
                             <div className="space-y-3">
@@ -349,17 +349,17 @@ export default function CreateClubPage() {
                                         onClick={() => updateForm('activityLevel', level.level as 'low' | 'medium' | 'high')}
                                         className={`w-full p-4 rounded-xl text-left transition-all flex items-center gap-4 ${
                                             formData.activityLevel === level.level
-                                                ? 'bg-sky-100 border-2 border-sky-400'
-                                                : 'bg-gray-50 border-2 border-transparent hover:bg-gray-100'
+                                                ? 'bg-sky-500/20 border-2 border-sky-400'
+                                                : 'bg-white/5 border-2 border-transparent hover:bg-white/10'
                                         }`}
                                     >
                                         <span className="text-2xl">{level.icon}</span>
                                         <div>
-                                            <p className="font-medium text-gray-800">{level.label}</p>
-                                            <p className="text-sm text-gray-500">{level.description}</p>
+                                            <p className="font-medium text-white">{level.label}</p>
+                                            <p className="text-sm text-slate-400">{level.description}</p>
                                         </div>
                                         {formData.activityLevel === level.level && (
-                                            <Check className="w-5 h-5 text-sky-500 ml-auto" />
+                                            <Check className="w-5 h-5 text-sky-400 ml-auto" />
                                         )}
                                     </button>
                                 ))}
@@ -377,12 +377,12 @@ export default function CreateClubPage() {
                         exit={{ opacity: 0, x: -20 }}
                         className="space-y-6"
                     >
-                        <div className="bg-sky-50 rounded-2xl p-4 border border-sky-100">
+                        <div className="bg-white/5 rounded-2xl p-4 border border-white/10">
                             <div className="flex items-start gap-3">
                                 <Users className="w-5 h-5 text-sky-500 mt-0.5" />
                                 <div>
-                                    <h3 className="font-medium text-gray-800">Membership Settings</h3>
-                                    <p className="text-sm text-gray-600 mt-1">
+                                    <h3 className="font-medium text-white">Membership Settings</h3>
+                                    <p className="text-sm text-slate-300 mt-1">
                                         Configure how players can join your club.
                                     </p>
                                 </div>
@@ -390,7 +390,7 @@ export default function CreateClubPage() {
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-3">
+                            <label className="block text-sm font-medium text-slate-200 mb-3">
                                 Joining Policy
                             </label>
                             <div className="space-y-3">
@@ -398,43 +398,43 @@ export default function CreateClubPage() {
                                     onClick={() => updateForm('isOpen', true)}
                                     className={`w-full p-4 rounded-xl text-left transition-all flex items-center gap-4 ${
                                         formData.isOpen
-                                            ? 'bg-green-100 border-2 border-green-400'
-                                            : 'bg-gray-50 border-2 border-transparent hover:bg-gray-100'
+                                            ? 'bg-green-500/20 border-2 border-green-400'
+                                            : 'bg-white/5 border-2 border-transparent hover:bg-white/10'
                                     }`}
                                 >
-                                    <div className={`w-12 h-12 rounded-full flex items-center justify-center ${formData.isOpen ? 'bg-green-500' : 'bg-gray-300'}`}>
+                                    <div className={`w-12 h-12 rounded-full flex items-center justify-center ${formData.isOpen ? 'bg-green-500' : 'bg-slate-600'}`}>
                                         <Unlock className="w-6 h-6 text-white" />
                                     </div>
                                     <div>
-                                        <p className="font-medium text-gray-800">Open Club</p>
-                                        <p className="text-sm text-gray-500">Anyone can join instantly</p>
+                                        <p className="font-medium text-white">Open Club</p>
+                                        <p className="text-sm text-slate-400">Anyone can join instantly</p>
                                     </div>
-                                    {formData.isOpen && <Check className="w-5 h-5 text-green-500 ml-auto" />}
+                                    {formData.isOpen && <Check className="w-5 h-5 text-green-400 ml-auto" />}
                                 </button>
 
                                 <button
                                     onClick={() => updateForm('isOpen', false)}
                                     className={`w-full p-4 rounded-xl text-left transition-all flex items-center gap-4 ${
                                         !formData.isOpen
-                                            ? 'bg-amber-100 border-2 border-amber-400'
-                                            : 'bg-gray-50 border-2 border-transparent hover:bg-gray-100'
+                                            ? 'bg-amber-500/20 border-2 border-amber-400'
+                                            : 'bg-white/5 border-2 border-transparent hover:bg-white/10'
                                     }`}
                                 >
-                                    <div className={`w-12 h-12 rounded-full flex items-center justify-center ${!formData.isOpen ? 'bg-amber-500' : 'bg-gray-300'}`}>
+                                    <div className={`w-12 h-12 rounded-full flex items-center justify-center ${!formData.isOpen ? 'bg-amber-500' : 'bg-slate-600'}`}>
                                         <Lock className="w-6 h-6 text-white" />
                                     </div>
                                     <div>
-                                        <p className="font-medium text-gray-800">Admin Approval</p>
-                                        <p className="text-sm text-gray-500">Review join requests manually</p>
+                                        <p className="font-medium text-white">Admin Approval</p>
+                                        <p className="text-sm text-slate-400">Review join requests manually</p>
                                     </div>
-                                    {!formData.isOpen && <Check className="w-5 h-5 text-amber-500 ml-auto" />}
+                                    {!formData.isOpen && <Check className="w-5 h-5 text-amber-400 ml-auto" />}
                                 </button>
                             </div>
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-3">
-                                Maximum Members: <span className="text-sky-600 font-bold">{formData.maxMembers}</span>
+                            <label className="block text-sm font-medium text-slate-200 mb-3">
+                                Maximum Members: <span className="text-sky-400 font-bold">{formData.maxMembers}</span>
                             </label>
                             <input
                                 type="range"
@@ -443,12 +443,12 @@ export default function CreateClubPage() {
                                 step={10}
                                 value={formData.maxMembers}
                                 onChange={(e) => updateForm('maxMembers', parseInt(e.target.value))}
-                                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                                className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer"
                                 style={{
-                                    background: `linear-gradient(to right, hsl(199, 89%, 48%) 0%, hsl(199, 89%, 48%) ${((formData.maxMembers - 10) / 190) * 100}%, #e5e7eb ${((formData.maxMembers - 10) / 190) * 100}%, #e5e7eb 100%)`
+                                    background: `linear-gradient(to right, hsl(199, 89%, 48%) 0%, hsl(199, 89%, 48%) ${((formData.maxMembers - 10) / 190) * 100}%, #334155 ${((formData.maxMembers - 10) / 190) * 100}%, #334155 100%)`
                                 }}
                             />
-                            <div className="flex justify-between text-xs text-gray-400 mt-1">
+                            <div className="flex justify-between text-xs text-slate-500 mt-1">
                                 <span>10</span>
                                 <span>200</span>
                             </div>

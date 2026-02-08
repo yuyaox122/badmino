@@ -157,9 +157,9 @@ export default function PartnerPreferencesPage() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-blue-50">
+        <div className="min-h-screen bg-slate-900">
             {/* Progress Bar */}
-            <div className="fixed top-16 left-0 right-0 h-1 bg-gray-200 z-40">
+            <div className="fixed top-16 left-0 right-0 h-1 bg-slate-800 z-40">
                 <motion.div
                     className="h-full bg-gradient-to-r from-sky-400 to-blue-500"
                     initial={{ width: 0 }}
@@ -171,7 +171,7 @@ export default function PartnerPreferencesPage() {
             <div className="container mx-auto px-4 py-8">
                 {/* Step Counter */}
                 <div className="text-center mb-4">
-                    <span className="text-sm text-sky-600 font-medium">
+                    <span className="text-sm text-sky-400 font-medium">
                         Step {currentStep + 1} of {questions.length}
                     </span>
                 </div>
@@ -188,17 +188,17 @@ export default function PartnerPreferencesPage() {
                     >
                         {/* Icon */}
                         <div className="flex justify-center mb-6">
-                            <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-sky-400 to-blue-500 flex items-center justify-center text-white shadow-lg shadow-sky-200">
+                            <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-sky-400 to-blue-500 flex items-center justify-center text-white shadow-lg">
                                 {currentQuestion.icon}
                             </div>
                         </div>
 
                         {/* Question */}
-                        <h1 className="text-2xl md:text-4xl font-bold text-center text-gray-800 mb-3">
+                        <h1 className="text-2xl md:text-4xl font-bold text-center text-white mb-3">
                             {currentQuestion.question}
                         </h1>
                         {currentQuestion.subtext && (
-                            <p className="text-center text-gray-500 mb-8">
+                            <p className="text-center text-slate-400 mb-8">
                                 {currentQuestion.subtext}
                             </p>
                         )}
@@ -212,7 +212,7 @@ export default function PartnerPreferencesPage() {
                                         placeholder={currentQuestion.placeholder}
                                         value={(answers[currentQuestion.id] as string) || ''}
                                         onChange={(e) => handleInputChange(e.target.value)}
-                                        className="w-full px-6 py-4 text-lg rounded-2xl border-2 border-sky-200 focus:border-sky-400 focus:ring-4 focus:ring-sky-100 outline-none transition-all"
+                                        className="w-full px-6 py-4 text-lg rounded-2xl border-2 border-white/20 bg-slate-800 text-white focus:border-sky-400 focus:ring-4 focus:ring-sky-400/20 outline-none transition-all placeholder:text-slate-500"
                                     />
                                 </div>
                             ) : (
@@ -232,18 +232,18 @@ export default function PartnerPreferencesPage() {
                                                 }
                                                 className={`relative flex items-center gap-4 p-5 rounded-2xl border-2 transition-all duration-200 ${
                                                     isSelected
-                                                        ? 'border-sky-400 bg-sky-50 shadow-lg shadow-sky-100'
-                                                        : 'border-gray-200 bg-white hover:border-sky-200 hover:bg-sky-50/50'
+                                                        ? 'border-sky-400 bg-sky-500/20 shadow-lg'
+                                                        : 'border-white/10 bg-slate-800 hover:border-white/20 hover:bg-slate-700'
                                                 }`}
                                             >
                                                 <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${
                                                     isSelected
                                                         ? 'border-sky-500 bg-sky-500'
-                                                        : 'border-gray-300'
+                                                        : 'border-slate-500'
                                                 }`}>
                                                     {isSelected && <Check className="w-4 h-4 text-white" />}
                                                 </div>
-                                                <span className={`font-medium ${isSelected ? 'text-sky-700' : 'text-gray-700'}`}>
+                                                <span className={`font-medium ${isSelected ? 'text-white' : 'text-slate-200'}`}>
                                                     {option.label}
                                                 </span>
                                             </button>
@@ -256,11 +256,11 @@ export default function PartnerPreferencesPage() {
                 </AnimatePresence>
 
                 {/* Navigation Buttons */}
-                <div className="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-xl border-t border-gray-100 p-4 md:relative md:bg-transparent md:border-none md:mt-12">
+                <div className="fixed bottom-0 left-0 right-0 bg-slate-800/80 backdrop-blur-xl border-t border-white/10 p-4 md:relative md:bg-transparent md:border-none md:mt-12">
                     <div className="max-w-2xl mx-auto flex items-center justify-between gap-4">
                         <button
                             onClick={handleBack}
-                            className="flex items-center gap-2 px-6 py-3 text-gray-600 font-medium rounded-xl hover:bg-gray-100 transition-colors"
+                            className="flex items-center gap-2 px-6 py-3 text-slate-300 font-medium rounded-xl hover:bg-white/10 transition-colors"
                         >
                             <ChevronLeft className="w-5 h-5" />
                             Back
@@ -271,8 +271,8 @@ export default function PartnerPreferencesPage() {
                             disabled={!canProceed()}
                             className={`flex items-center gap-2 px-8 py-3 font-semibold rounded-xl transition-all ${
                                 canProceed()
-                                    ? 'bg-gradient-to-r from-sky-500 to-blue-600 text-white shadow-lg shadow-sky-200 hover:shadow-xl'
-                                    : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                                    ? 'bg-white text-slate-900 hover:bg-slate-100'
+                                    : 'bg-slate-700 text-slate-500 cursor-not-allowed'
                             }`}
                         >
                             {currentStep === questions.length - 1 ? 'Find Partners' : 'Continue'}

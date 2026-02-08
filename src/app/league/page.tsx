@@ -53,7 +53,7 @@ const upcomingMatches = [
 
 export default function LeaguePage() {
     return (
-        <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-blue-50">
+        <div className="min-h-screen bg-slate-900">
             <Header 
                 title="League" 
                 subtitle="Compete in local badminton leagues"
@@ -70,18 +70,18 @@ export default function LeaguePage() {
                             transition={{ delay: index * 0.1 }}
                         >
                             <Link href={option.href}>
-                                <div className="group bg-white rounded-2xl p-6 shadow-lg border border-gray-100 hover:border-sky-200 hover:shadow-xl transition-all duration-300 cursor-pointer">
+                                <div className="group bg-slate-800 rounded-2xl p-6 shadow-lg border border-white/10 hover:border-white/20 hover:shadow-xl transition-all duration-300 cursor-pointer">
                                     <div className="flex items-start gap-4">
                                         <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${option.gradient} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300`}>
                                             <option.icon className="w-7 h-7 text-white" />
                                         </div>
                                         <div className="flex-1">
-                                            <h3 className="text-lg font-bold text-gray-800 group-hover:text-sky-600 transition-colors">
+                                            <h3 className="text-lg font-bold text-white group-hover:text-sky-400 transition-colors">
                                                 {option.title}
                                             </h3>
-                                            <p className="text-gray-500">{option.description}</p>
+                                            <p className="text-slate-400">{option.description}</p>
                                         </div>
-                                        <ArrowRight className="w-5 h-5 text-gray-300 group-hover:text-sky-500 group-hover:translate-x-1 transition-all" />
+                                        <ArrowRight className="w-5 h-5 text-slate-600 group-hover:text-sky-400 group-hover:translate-x-1 transition-all" />
                                     </div>
                                 </div>
                             </Link>
@@ -94,9 +94,9 @@ export default function LeaguePage() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4 }}
-                    className="bg-white rounded-3xl shadow-lg p-6 border border-sky-100"
+                    className="bg-slate-800 rounded-3xl shadow-lg p-6 border border-white/10"
                 >
-                    <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                    <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
                         <Calendar className="w-6 h-6 text-sky-500" />
                         Upcoming League Matches
                     </h2>
@@ -105,19 +105,19 @@ export default function LeaguePage() {
                         {upcomingMatches.map((match, index) => (
                             <div
                                 key={index}
-                                className="flex items-center justify-between p-4 rounded-xl bg-gray-50 border border-gray-100 hover:bg-sky-50 hover:border-sky-200 transition-colors"
+                                className="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-colors"
                             >
                                 <div className="flex items-center gap-4">
                                     <div className="w-10 h-10 rounded-full bg-gradient-to-br from-sky-400 to-blue-500 flex items-center justify-center text-white font-bold">
                                         {match.opponent.charAt(0)}
                                     </div>
                                     <div>
-                                        <p className="font-semibold text-gray-800">vs {match.opponent}</p>
-                                        <p className="text-sm text-gray-500">{match.venue}</p>
+                                        <p className="font-semibold text-white">vs {match.opponent}</p>
+                                        <p className="text-sm text-slate-400">{match.venue}</p>
                                     </div>
                                 </div>
                                 <div className="text-right">
-                                    <p className="text-sm font-medium text-sky-600">{match.date}</p>
+                                    <p className="text-sm font-medium text-sky-400">{match.date}</p>
                                 </div>
                             </div>
                         ))}

@@ -27,7 +27,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
-  themeColor: "#0ea5e9",
+  themeColor: "#131b2e",
 };
 
 export default function RootLayout({
@@ -38,7 +38,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gradient-to-br from-sky-50 via-white to-blue-50 min-h-screen`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#131b2e] min-h-screen`}
       >
         <UserProvider>
           <BookingProvider>

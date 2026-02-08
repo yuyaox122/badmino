@@ -98,7 +98,7 @@ export default function ClubsPage() {
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
                             exit={{ opacity: 0, x: 20 }}
-                            className="space-y-4"
+                            className="space-y-6"
                         >
                             {/* My Clubs - Created by User */}
                             {myCreatedClubs.length > 0 && (
@@ -107,42 +107,21 @@ export default function ClubsPage() {
                                         <Star size={14} className="text-amber-500" />
                                         My Clubs (Created by you)
                                     </h2>
-                                    <div className="space-y-3">
+                                    <div className="grid grid-cols-3 gap-3">
                                         {myCreatedClubs.map((club) => (
-                                            <motion.div key={club.id} whileHover={{ scale: 1.01 }}>
-                                                <Card
-                                                    className="overflow-hidden cursor-pointer border-amber-500/30 bg-amber-500/5"
-                                                    onClick={() => setSelectedClub(club)}
-                                                >
-                                                    <CardContent className="p-4">
-                                                        <div className="flex items-start gap-4">
-                                                            <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center text-2xl shadow-lg">
-                                                                👑
-                                                            </div>
-
-                                                            <div className="flex-1 min-w-0">
-                                                                <div className="flex items-center gap-2">
-                                                                    <h3 className="font-bold truncate">{club.name}</h3>
-                                                                    <Badge variant="secondary" className="bg-amber-500/20 text-amber-700 text-xs">
-                                                                        <Star size={12} className="mr-1" />
-                                                                        Owner
-                                                                    </Badge>
-                                                                </div>
-
-                                                                <div className="flex items-center gap-3 mt-1 text-sm text-muted-foreground">
-                                                                    <span className="flex items-center gap-1">
-                                                                        <Users size={14} />
-                                                                        {club.memberCount}
-                                                                    </span>
-                                                                    <span className={`flex items-center gap-1 ${getActivityColor(club.activityLevel)}`}>
-                                                                        <Activity size={14} />
-                                                                        {club.activityLevel}
-                                                                    </span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </CardContent>
-                                                </Card>
+                                            <motion.div 
+                                                key={club.id} 
+                                                whileHover={{ scale: 1.05 }}
+                                                className="cursor-pointer"
+                                                onClick={() => setSelectedClub(club)}
+                                            >
+                                                <div className="flex flex-col items-center p-3 rounded-2xl bg-amber-500/10 border border-amber-500/30 hover:bg-amber-500/20 transition-all">
+                                                    <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center text-xl shadow-lg mb-2">
+                                                        👑
+                                                    </div>
+                                                    <h3 className="font-medium text-sm text-center truncate w-full">{club.name}</h3>
+                                                    <span className="text-xs text-muted-foreground">{club.memberCount} members</span>
+                                                </div>
                                             </motion.div>
                                         ))}
                                     </div>
@@ -156,42 +135,25 @@ export default function ClubsPage() {
                                         <CheckCircle size={14} className="text-green-500" />
                                         Joined Clubs
                                     </h2>
-                                    <div className="space-y-3">
+                                    <div className="grid grid-cols-3 gap-3">
                                         {myJoinedClubs.map((club) => (
-                                            <motion.div key={club.id} whileHover={{ scale: 1.01 }}>
-                                                <Card
-                                                    className="overflow-hidden cursor-pointer border-green-500/30 bg-green-500/5"
-                                                    onClick={() => setSelectedClub(club)}
-                                                >
-                                                    <CardContent className="p-4">
-                                                        <div className="flex items-start gap-4">
-                                                            <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center text-2xl shadow-lg">
-                                                                🏟️
-                                                            </div>
-
-                                                            <div className="flex-1 min-w-0">
-                                                                <div className="flex items-center gap-2">
-                                                                    <h3 className="font-bold truncate">{club.name}</h3>
-                                                                    <Badge variant="secondary" className="bg-green-500/20 text-green-600 text-xs">
-                                                                        <CheckCircle size={12} className="mr-1" />
-                                                                        Member
-                                                                    </Badge>
-                                                                </div>
-
-                                                                <div className="flex items-center gap-3 mt-1 text-sm text-muted-foreground">
-                                                                    <span className="flex items-center gap-1">
-                                                                        <Users size={14} />
-                                                                        {club.memberCount}
-                                                                    </span>
-                                                                    <span className={`flex items-center gap-1 ${getActivityColor(club.activityLevel)}`}>
-                                                                        <Activity size={14} />
-                                                                        {club.activityLevel}
-                                                                    </span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </CardContent>
-                                                </Card>
+                                            <motion.div 
+                                                key={club.id} 
+                                                whileHover={{ scale: 1.05 }}
+                                                className="cursor-pointer"
+                                                onClick={() => setSelectedClub(club)}
+                                            >
+                                                <div className="flex flex-col items-center p-3 rounded-2xl bg-green-500/10 border border-green-500/30 hover:bg-green-500/20 transition-all">
+                                                    <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center text-xl shadow-lg mb-2 overflow-hidden">
+                                                        {club.avatarUrl ? (
+                                                            <img src={club.avatarUrl} alt={club.name} className="w-full h-full object-cover" />
+                                                        ) : (
+                                                            '🏟️'
+                                                        )}
+                                                    </div>
+                                                    <h3 className="font-medium text-sm text-center truncate w-full">{club.name}</h3>
+                                                    <span className="text-xs text-muted-foreground">{club.memberCount} members</span>
+                                                </div>
                                             </motion.div>
                                         ))}
                                     </div>
@@ -202,74 +164,34 @@ export default function ClubsPage() {
                             {discoverClubs.length > 0 && (
                             <div>
                                 <h2 className="text-sm font-medium text-muted-foreground mb-3">Discover Clubs</h2>
-                                <div className="space-y-3">
+                                <div className="grid grid-cols-3 gap-3">
                                     {discoverClubs.map((club, index) => (
                                         <motion.div
                                             key={club.id}
                                             initial={{ opacity: 0, y: 20 }}
                                             animate={{ opacity: 1, y: 0 }}
-                                            transition={{ delay: index * 0.1 }}
-                                            whileHover={{ scale: 1.01 }}
+                                            transition={{ delay: index * 0.05 }}
+                                            whileHover={{ scale: 1.05 }}
+                                            className="cursor-pointer"
+                                            onClick={() => setSelectedClub(club)}
                                         >
-                                            <Card
-                                                className="overflow-hidden cursor-pointer hover:shadow-lg transition-shadow"
-                                                onClick={() => setSelectedClub(club)}
-                                            >
-                                                <CardContent className="p-4">
-                                                    <div className="flex items-start gap-4">
-                                                        <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-2xl shadow-lg overflow-hidden">
-                                                            {club.avatarUrl ? (
-                                                                <img src={club.avatarUrl} alt={club.name} className="w-full h-full object-cover" />
-                                                            ) : (
-                                                                '🏟️'
-                                                            )}
+                                            <div className="flex flex-col items-center p-3 rounded-2xl bg-slate-800 border border-white/10 hover:border-white/20 hover:bg-slate-700/50 transition-all">
+                                                <div className="relative w-14 h-14 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-xl shadow-lg mb-2 overflow-hidden">
+                                                    {club.avatarUrl ? (
+                                                        <img src={club.avatarUrl} alt={club.name} className="w-full h-full object-cover" />
+                                                    ) : (
+                                                        '🏟️'
+                                                    )}
+                                                    {/* Lock icon for invite-only */}
+                                                    {!club.isOpen && (
+                                                        <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-yellow-500 rounded-full flex items-center justify-center">
+                                                            <Lock size={10} className="text-white" />
                                                         </div>
-
-                                                        <div className="flex-1 min-w-0">
-                                                            <div className="flex items-center gap-2">
-                                                                <h3 className="font-bold truncate">{club.name}</h3>
-                                                                {club.isOpen ? (
-                                                                    <Unlock size={14} className="text-green-500" />
-                                                                ) : (
-                                                                    <Lock size={14} className="text-yellow-500" />
-                                                                )}
-                                                            </div>
-
-                                                            <p className="text-sm text-muted-foreground line-clamp-1 mt-0.5">
-                                                                {club.description}
-                                                            </p>
-
-                                                            <div className="flex items-center gap-3 mt-2 text-sm text-muted-foreground">
-                                                                <span className="flex items-center gap-1">
-                                                                    <Users size={14} />
-                                                                    {club.memberCount} members
-                                                                </span>
-                                                                <span className={`flex items-center gap-1 ${getActivityColor(club.activityLevel)}`}>
-                                                                    <Activity size={14} />
-                                                                    {club.activityLevel}
-                                                                </span>
-                                                            </div>
-
-                                                            {/* Member avatars preview */}
-                                                            <div className="flex items-center mt-3">
-                                                                <div className="flex -space-x-2">
-                                                                    {getMemberAvatars(club).map((member) => (
-                                                                        <Avatar key={member.id} className="w-7 h-7 border-2 border-background">
-                                                                            <AvatarImage src={member.avatarUrl} />
-                                                                            <AvatarFallback>{member.name[0]}</AvatarFallback>
-                                                                        </Avatar>
-                                                                    ))}
-                                                                </div>
-                                                                {club.memberCount > 3 && (
-                                                                    <span className="text-xs text-muted-foreground ml-2">
-                                                                        +{club.memberCount - 3} more
-                                                                    </span>
-                                                                )}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </CardContent>
-                                            </Card>
+                                                    )}
+                                                </div>
+                                                <h3 className="font-medium text-sm text-center truncate w-full">{club.name}</h3>
+                                                <span className="text-xs text-muted-foreground">{club.memberCount} members</span>
+                                            </div>
                                         </motion.div>
                                     ))}
                                 </div>
